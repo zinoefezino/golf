@@ -93,7 +93,7 @@ export default function LoginPage() {
       {/* ── LEFT: Photo panel ── */}
       <div className="hidden md:flex md:w-[45%] relative shrink-0">
         <Image
-          src="/img2.avif"
+          src="/img11.avif"
           alt="Golf course fairway"
           fill
           priority
