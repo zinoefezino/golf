@@ -93,7 +93,7 @@ export default function Header() {
         {/* CTA */}
         <div className="hidden md:flex">
           <Link
-            href="/auth/signup"
+            href="/signup"
             className="group flex items-center gap-4 rounded-full bg-[#121212] py-1 pl-6 pr-1 text-sm font-medium text-white shadow-lg shadow-black/30 backdrop-blur-md transition-all duration-300 hover:bg-[#1E3517]"
           >
             <span>JOIN THE CLUB</span>
