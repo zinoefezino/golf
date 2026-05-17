@@ -2,21 +2,23 @@ import Link from "next/link";
 import Image from "next/image";
 
 const HERO_TAGS = [
-  "Golf Gear",
-  "Social",
-  "Advance",
-  "Green View Grill",
-  "Advance",
+  "Luxury Golf Resort",
+  "Private Membership",
+  "Scenic Views",
+  "Fine Dining",
+  "Elite Experience",
 ];
 
 export default function Hero() {
   return (
     <section className="relative h-screen min-h-160 overflow-hidden">
       <Image
-        src="/hero4.avif"
+        src="/hero.webp"
         alt="Golfer on lush fairway"
         fill
         priority
+        quality={75}
+        sizes="100vw"
         className="object-cover object-center"
       />
 
@@ -30,14 +32,15 @@ export default function Hero() {
           {/* Bottom-left content */}
           <div className="max-w-5xl ">
             <h1 className=" text-white text-5xl md:text-6xl font-black leading-[1.05] tracking-tight mb-5 drop-shadow-xl">
-              Unwind, Play, and
+              A New Standard
               <br />
-              Perfect Your Swing
+              Of Golf Experience
             </h1>
 
             <p className="mb-8 max-w-md text-base leading-relaxed text-white/75 md:text-lg">
-              A championship experience awaits you on lush, world-class
-              fairways. Your Next Legendary Round Starts Here.
+              Escape to pristine fairways, refined clubhouse experiences, and a
+              golf destination designed for players who appreciate the game at
+              its finest.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -45,7 +48,7 @@ export default function Hero() {
                 href="#"
                 className="group flex items-center gap-3 rounded-full bg-[#1A1A1A]/80 py-1 pl-5 pr-1 text-sm font-bold tracking-wide text-white shadow-lg shadow-black/20 transition-all duration-300 hover:bg-[#111111]"
               >
-                <span>JOIN OUR TEAM</span>
+                <span>BOOK A TEE TIME</span>
 
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#C8E650] text-[#1A1A1A] transition-transform duration-300 group-hover:rotate-45">
                   <svg

@@ -122,6 +122,7 @@ export default function StorySection() {
               src={data.img1.src}
               alt={data.img1.alt}
               fill
+              sizes="(max-width: 1024px) 100vw, (min-width: 1024px) 50vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -135,6 +136,7 @@ export default function StorySection() {
               src={data.img2.src}
               alt={data.img2.alt}
               fill
+              sizes="(max-width: 1024px) 100vw, (min-width: 1024px) 50vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-black/20" />
@@ -148,6 +150,7 @@ export default function StorySection() {
               src={data.img3.src}
               alt={data.img3.alt}
               fill
+              sizes="(max-width: 1024px) 100vw, (min-width: 1024px) 50vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-black/20" />
