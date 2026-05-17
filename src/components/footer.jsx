@@ -22,9 +22,7 @@ export default function Footer() {
           <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight">
             Ready to Tee Off?
             <br />
-            <span className="text-white/70 font-black">
-              Let's discuss with us.
-            </span>
+            <span className="text-white/70 font-black">Discuss with us.</span>
           </h1>
         </div>
 
