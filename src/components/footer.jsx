@@ -157,7 +157,7 @@ export default function Footer() {
             <path d="M16 2 A14 14 0 0 1 16 30 Z" fill="#C8E650" />
           </svg>
           <span className="text-white/30 text-xs">
-            © {new Date().getFullYear()} Golfngv. All rights reserved.
+            © {new Date().getFullYear()} Golf. All rights reserved.
           </span>
         </div>
         <div className="flex items-center gap-5">
