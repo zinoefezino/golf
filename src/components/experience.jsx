@@ -12,15 +12,15 @@ const CARDS = [
     id: 2,
     src: "/img5.avif",
     alt: "Golfer with glove",
-    label: "Exclusive Events",
-    sub: "Curated golf days, private tournaments, member socials, and unforgettable club experiences.",
+    label: "Private Events",
+    sub: "Host memorable golf days, intimate gatherings, tournaments, and celebrations in a scenic club setting.",
   },
   {
     id: 3,
     src: "/img6.avif",
     alt: "Golf coaching session",
-    label: "Pro Instructors",
-    sub: "Personal coaching designed to improve your swing, sharpen your short game, and build confidence.",
+    label: "Player Services",
+    sub: "From tee time support to equipment guidance, every detail is shaped to make your visit effortless.",
   },
   {
     id: 4,
@@ -62,22 +62,19 @@ function Card({ card, className = "", textClassName = "", priority = false }) {
   );
 }
 
-export default function AcademySection() {
+export default function ClubExperienceSection() {
   return (
     <section className="bg-[#F5F2EC] px-4 py-14 md:px-16 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-12 max-w-2xl text-center">
-          <p className="mb-3 text-sm tracking-[0.2em] text-[#4A7C2F] ">
-            Golf Academy
-          </p>
-
-          <h1 className="mb-4 text-3xl font-black leading-tight  text-[#1A1A1A] md:text-5xl">
-            Professional Coaching &amp; Golf Academy
+          <h1 className="mb-4 text-3xl font-black leading-tight text-[#1A1A1A] md:text-5xl">
+            Everything You Need for a Memorable Round
           </h1>
 
           <p className="mx-auto max-w-lg text-sm leading-relaxed text-[#777] md:text-base">
-            Improve your game with expert coaching, premium facilities, and a
-            club experience shaped around precision, calm, and confidence.
+            From scenic fairways to thoughtful hospitality, every part of the
+            club is designed to make your time on and off the course feel
+            seamless.
           </p>
         </div>
 

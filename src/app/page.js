@@ -1,5 +1,6 @@
 import AboutSection from "@/components/aboutSection";
-import AcademySection from "@/components/academySection";
+import ClubExperienceSection from "@/components/experience";
+
 import FAQSection from "@/components/faq";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
@@ -12,7 +13,7 @@ export default function Page() {
       <Header />
       <Hero />
       <StorySection />
-      <AcademySection />
+      <ClubExperienceSection />
       <AboutSection />
 
       <FAQSection />
