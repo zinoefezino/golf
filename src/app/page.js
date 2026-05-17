@@ -14,6 +14,7 @@ export default function Page() {
       <StorySection />
       <AcademySection />
       <AboutSection />
+
       <FAQSection />
       <Footer />
     </div>

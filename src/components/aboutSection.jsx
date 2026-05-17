@@ -46,7 +46,7 @@ export default function AboutSection() {
           </div>
 
           <div className="max-w-2xl md:justify-self-end">
-            <p className="text-base leading-relaxed text-[#172112]/65 md:text-lg">
+            <p className=" leading-relaxed text-[#172112]/65 ">
               Latest golf gear, branded apparel, expert fitting services, and a
               course designed for memorable rounds. Play as often as you like,
               weekdays, weekends, anytime.
@@ -54,16 +54,16 @@ export default function AboutSection() {
 
             <div className="mt-8 grid grid-cols-2 gap-3 sm:flex">
               <div className="rounded-3xl border border-[#2D4A1E]/10 bg-white/75 px-5 py-5 shadow-sm backdrop-blur">
-                <p className="text-4xl font-black leading-none text-[#172112]">
+                <p className=" text-3xl font-black leading-none text-[#172112]">
                   50+
                 </p>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[#172112]/45">
+                <p className="mt-2  font-semibold uppercase tracking-wide text-[#172112]/45">
                   Countries
                 </p>
               </div>
 
               <div className="rounded-3xl bg-[#C8E650] px-5 py-5 shadow-sm">
-                <p className="text-4xl font-black leading-none text-[#172112]">
+                <p className="text-3xl font-black leading-none text-[#172112]">
                   2M
                 </p>
                 <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[#172112]/55">
@@ -116,7 +116,7 @@ export default function AboutSection() {
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent" />
               <div className="absolute bottom-5 left-5 right-5">
-                <p className="text-2xl font-black leading-tight text-white md:text-3xl">
+                <p className=" font-black leading-tight text-white">
                   Championship-ready fairways
                 </p>
                 <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/70">
@@ -175,7 +175,7 @@ export default function AboutSection() {
           <div className="flex flex-col justify-between gap-10 p-7 md:p-10">
             <div>
               <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-                Join Our Team
+                Join Us
               </span>
 
               <h3 className="mt-5 max-w-xl text-3xl font-black leading-tight tracking-tight text-white md:text-5xl">
@@ -184,10 +184,10 @@ export default function AboutSection() {
             </div>
 
             <Link
-              href="#"
+              href="/booking"
               className="group inline-flex w-fit items-center gap-4 rounded-full bg-[#C8E650] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-[#1A1A1A] transition-all duration-300 hover:bg-white"
             >
-              <span>JOIN OUR TEAM</span>
+              <span>BOOK A TEE TIME</span>
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-white transition-transform duration-300 group-hover:rotate-45">
                 <ArrowIcon />
               </span>

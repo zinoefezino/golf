@@ -42,7 +42,7 @@ export default function Hero() {
 
             <div className="flex flex-wrap items-center gap-3">
               <Link
-                href="#"
+                href="/booking"
                 className="group flex items-center gap-3 rounded-full bg-[#1A1A1A]/80 py-1 pl-5 pr-1 text-sm font-bold tracking-wide text-white shadow-lg shadow-black/20 transition-all duration-300 hover:bg-[#111111]"
               >
                 <span>BOOK A TEE TIME</span>
@@ -58,13 +58,6 @@ export default function Hero() {
                     <path d="M7 17L17 7M7 7h10v10" />
                   </svg>
                 </span>
-              </Link>
-
-              <Link
-                href="#"
-                className="rounded-full border border-white/30 bg-white/15 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/25 sm:px-8"
-              >
-                Discover
               </Link>
             </div>
           </div>
