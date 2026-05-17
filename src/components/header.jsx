@@ -148,11 +148,20 @@ export default function Header() {
 
             <Link
               href="/auth/signup"
-              className="mt-2 flex items-center justify-center gap-3 rounded-full bg-[#121212] px-5 py-3 font-medium text-white"
+              className="group mt-2 flex items-center justify-between rounded-full bg-[#121212] py-1.5 pl-5 pr-1.5 font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#2D4A1E]"
             >
-              JOIN THE CLUB
-              <span className="h-8 w-8 grid place-items-center rounded-full bg-[#C8E650] text-black">
-                →
+              <span>JOIN THE CLUB</span>
+
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C8E650] text-[#121212] transition-transform duration-300 group-hover:rotate-45">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M7 17L17 7M7 7h10v10" />
+                </svg>
               </span>
             </Link>
           </div>
