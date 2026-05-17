@@ -41,7 +41,7 @@ export default function AboutSection() {
               About Us
             </span>
 
-            <h1 className="mt-5 max-w-xl text-4xl font-black leading-[1.05] tracking-tight text-[#172112] md:text-6xl">
+            <h1 className="mt-5 max-w-xl  font-black leading-[1.05] tracking-tight text-[#172112] text-5xl md:text-6xl ">
               Built for players
               <br />
               who love the game
@@ -97,7 +97,7 @@ export default function AboutSection() {
               Course Standard
             </span>
 
-            <h1 className="text-3xl font-black leading-tight tracking-tight text-[#172112] md:text-5xl">
+            <h1 className="text-5xl md:text-6xl font-black leading-tight tracking-tight text-[#172112] ">
               Championship Conditions,
               <br />
               Confident Play
@@ -195,7 +195,7 @@ export default function AboutSection() {
                 Join Us
               </span>
 
-              <h3 className="mt-5 max-w-xl text-3xl font-black leading-tight tracking-tight text-white md:text-5xl">
+              <h3 className="mt-5 max-w-xl text-5xl font-black leading-tight tracking-tight text-white md:text-6xl">
                 Be part of a club that plays with purpose.
               </h3>
             </div>

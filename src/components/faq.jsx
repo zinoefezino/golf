@@ -79,7 +79,7 @@ export default function FAQSection() {
     <section className="bg-[#F5F2EC] px-4 md:px-16 py-14 md:py-20">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-black leading-tight tracking-tight mb-3">
+        <h1 className="text-[#1A1A1A] text-5xl md:text-6xl tracking-tight font-black leading-tight  mb-3">
           Frequently Asked Questions
         </h1>
         <p className="text-[#888] text-sm md:text-base max-w-sm mx-auto leading-relaxed">
