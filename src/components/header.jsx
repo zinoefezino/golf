@@ -147,7 +147,7 @@ export default function Header() {
             ))}
 
             <Link
-              href="/auth/signup"
+              href="/signup"
               className="group mt-2 flex items-center justify-between rounded-full bg-[#121212] py-1.5 pl-5 pr-1.5 font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#2D4A1E]"
             >
               <span>JOIN THE CLUB</span>

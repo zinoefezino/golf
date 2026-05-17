@@ -255,10 +255,7 @@ export default function SignUpPage() {
             </svg>
             <span className="text-lg font-bold text-[#1A1A1A]">Golf</span>
           </Link>
-          <Link
-            href="/auth/login"
-            className="text-sm font-semibold text-[#2D4A1E]"
-          >
+          <Link href="/login" className="text-sm font-semibold text-[#2D4A1E]">
             Log in
           </Link>
         </div>
@@ -275,7 +272,7 @@ export default function SignUpPage() {
             <p className="text-[#888] text-sm">
               Already a member?{" "}
               <Link
-                href="/auth/login"
+                href="/login"
                 className="text-[#2D4A1E] font-semibold hover:underline"
               >
                 Log in

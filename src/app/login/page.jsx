@@ -170,10 +170,7 @@ export default function LoginPage() {
             </svg>
             <span className="text-lg font-bold text-[#1A1A1A]">Golf</span>
           </Link>
-          <Link
-            href="/auth/signup"
-            className="text-sm font-semibold text-[#2D4A1E]"
-          >
+          <Link href="/signup" className="text-sm font-semibold text-[#2D4A1E]">
             Sign up
           </Link>
         </div>
@@ -190,7 +187,7 @@ export default function LoginPage() {
             <p className="text-[#888] text-sm">
               No account?{" "}
               <Link
-                href="/auth/signup"
+                href="/signup"
                 className="text-[#2D4A1E] font-semibold hover:underline"
               >
                 Sign up free
