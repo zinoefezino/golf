@@ -72,7 +72,7 @@ export default function Footer() {
               Golf
             </span>
           </Link>
-          <p className="text-white/45 text-xs leading-relaxed max-w-[180px]">
+          <p className="text-white/45 text-xs leading-relaxed max-w-45">
             A championship golfing experience for every level of player.
           </p>
 

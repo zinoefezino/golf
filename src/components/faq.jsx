@@ -5,7 +5,7 @@ import { useState } from "react";
 const FAQS = [
   {
     q: "How do I book a tee time?",
-    a: "You can book a tee time directly through our website, by calling the pro shop, or by visiting us in person. Online bookings are available up to 14 days in advance.",
+    a: "You can book a tee time directly through our website, by filling the form, or by visiting us in person. Online bookings are available up to 14 days in advance.",
   },
   {
     q: "Do I need to be a member to play?",
