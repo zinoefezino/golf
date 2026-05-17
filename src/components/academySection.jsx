@@ -67,11 +67,11 @@ export default function AcademySection() {
     <section className="bg-[#F5F2EC] px-4 py-14 md:px-16 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-12 max-w-2xl text-center">
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#4A7C2F]">
+          <p className="mb-3 text-sm tracking-[0.2em] text-[#4A7C2F] ">
             Golf Academy
           </p>
 
-          <h1 className="mb-4 text-3xl font-black leading-tight tracking-tight text-[#1A1A1A] md:text-5xl">
+          <h1 className="mb-4 text-3xl font-black leading-tight  text-[#1A1A1A] md:text-5xl">
             Professional Coaching &amp; Golf Academy
           </h1>
 

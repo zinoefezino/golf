@@ -15,7 +15,7 @@ function ArrowIcon({ className = "h-4 w-4" }) {
   );
 }
 
-function PillButton({ href = "#", children }) {
+function PillButton({ href = "/booking", children }) {
   return (
     <Link
       href={href}
@@ -34,40 +34,56 @@ export default function AboutSection() {
     <section className="overflow-hidden bg-[#F5F2EC] px-4 py-16 md:px-8 md:py-24">
       <div className="mx-auto max-w-7xl">
         {/* Top intro */}
-        <div className="grid gap-8 border-b border-[#2D4A1E]/10 pb-12 md:grid-cols-[0.8fr_1.2fr] md:items-end md:pb-16">
+        <div className="grid gap-10 border-b border-[#2D4A1E]/10 pb-14 md:grid-cols-[0.9fr_1.1fr] md:items-end md:pb-20">
+          {/* LEFT: LABEL + TITLE */}
           <div>
-            <span className="inline-flex rounded-full border border-[#2D4A1E]/15 bg-white/70 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#2D4A1E]/70 shadow-sm backdrop-blur">
+            <span className="inline-flex rounded-full border border-[#2D4A1E]/15 bg-white/70 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.25em] text-[#2D4A1E]/70">
               About Us
             </span>
 
-            <h1 className="mt-5 max-w-xl text-4xl font-black leading-[1.02] tracking-tight text-[#172112] md:text-6xl">
-              Built for players who love the game.
+            <h1 className="mt-5 max-w-xl text-4xl font-black leading-[1.05] tracking-tight text-[#172112] md:text-6xl">
+              Built for players
+              <br />
+              who love the game
             </h1>
           </div>
 
-          <div className="max-w-2xl md:justify-self-end">
-            <p className=" leading-relaxed text-[#172112]/65 ">
-              Latest golf gear, branded apparel, expert fitting services, and a
-              course designed for memorable rounds. Play as often as you like,
-              weekdays, weekends, anytime.
-            </p>
+          {/* RIGHT: ABOUT BOX + STATS */}
+          <div className="md:justify-self-end max-w-2xl">
+            {/* ABOUT BOX */}
+            <div className="rounded-4xl border border-[#2D4A1E]/10 bg-white/70 p-6 shadow-sm backdrop-blur md:p-8">
+              <p className="text-sm leading-relaxed text-[#172112]/70">
+                We are a premium golf and leisure destination built for players
+                who value calm environments, perfectly maintained fairways, and
+                a refined clubhouse experience. Every detail of the course is
+                designed to blend sport, nature, and comfort into one seamless
+                journey.
+              </p>
 
+              <p className="mt-4 text-sm leading-relaxed text-[#172112]/60">
+                From sunrise tee times to evening clubhouse dining, we create
+                moments that feel intentional, immersive, and memorable long
+                after your final round.
+              </p>
+            </div>
+
+            {/* STATS */}
             <div className="mt-8 grid grid-cols-2 gap-3 sm:flex">
-              <div className="rounded-3xl border border-[#2D4A1E]/10 bg-white/75 px-5 py-5 shadow-sm backdrop-blur">
-                <p className=" text-3xl font-black leading-none text-[#172112]">
-                  50+
+              <div className="rounded-3xl border border-[#2D4A1E]/10 bg-white/70 px-6 py-6 shadow-sm backdrop-blur">
+                <p className="text-3xl font-black leading-none text-[#172112]">
+                  18
                 </p>
-                <p className="mt-2  font-semibold uppercase tracking-wide text-[#172112]/45">
-                  Countries
+                <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[#172112]/45">
+                  Championship Holes
                 </p>
               </div>
 
-              <div className="rounded-3xl bg-[#C8E650] px-5 py-5 shadow-sm">
+              <div className="rounded-3xl bg-[#C8E650] px-6 py-6 shadow-sm">
                 <p className="text-3xl font-black leading-none text-[#172112]">
-                  2M
+                  365
                 </p>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[#172112]/55">
-                  Rounds Played
+                <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[#172112]/70">
+                  Days Open
                 </p>
               </div>
             </div>
@@ -82,26 +98,27 @@ export default function AboutSection() {
             </span>
 
             <h1 className="text-3xl font-black leading-tight tracking-tight text-[#172112] md:text-5xl">
-              Quality Course,
+              Championship Conditions,
               <br />
-              Confident Ball
+              Confident Play
             </h1>
 
             <div className="mt-6 space-y-4 text-sm leading-relaxed text-[#172112]/65 md:text-base">
               <p>
-                Whether you&apos;re a seasoned pro or picking up a club for the
-                first time, our course is equipped to challenge and inspire.
-                Each hole is maintained to championship standards.
+                Whether you’re a seasoned player or stepping onto the course for
+                the first time, our fairways are designed to challenge, inspire,
+                and elevate every round.
               </p>
+
               <p>
-                From tee design and putting speed to immaculate conditions
-                year-round, every detail is shaped to make each round feel
-                precise, calm, and rewarding.
+                Every detail is carefully shaped to create a playing experience
+                that feels balanced, focused, and deeply rewarding from the
+                first swing to the final putt.
               </p>
             </div>
 
             <div className="mt-8">
-              <PillButton>Discover More</PillButton>
+              <PillButton>BOOK NOW</PillButton>
             </div>
           </div>
 
