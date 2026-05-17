@@ -3,7 +3,7 @@ import Image from "next/image";
 const CARDS = [
   {
     id: 1,
-    src: "/hero.avif",
+    src: "/img9.avif",
     alt: "Golf balls and tees",
     label: "Elegant Clubhouse",
     sub: "No downloads, no setup  join instantly, editors now use for them make data-driven decisions.",
@@ -11,7 +11,7 @@ const CARDS = [
   },
   {
     id: 2,
-    src: "/hero.avif",
+    src: "/img3.avif",
     alt: "Golfer with glove",
     label: "Exclusive Events",
     sub: "No downloads, no setup  join instantly, editors now use for them.",
@@ -19,7 +19,7 @@ const CARDS = [
   },
   {
     id: 3,
-    src: "/hero.avif",
+    src: "/img6.avif",
     alt: "Golf coaching session",
     label: "Pro Instructors",
     sub: "No downloads, no setup  join instantly, editors now use for them.",
@@ -27,7 +27,7 @@ const CARDS = [
   },
   {
     id: 4,
-    src: "/hero.avif",
+    src: "/img11.avif",
     alt: "Lush golf course landscape",
     label: "Lush Landscape & Water Features",
     sub: "No downloads, no setup — join instantly, editors now use for them.",
