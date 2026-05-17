@@ -16,8 +16,9 @@ export default function Hero() {
         src="/hero4.webp"
         alt="Golfer on lush fairway"
         fill
+        quality={85}
         priority
-        sizes="100vw"
+        sizes="(max-width: 768px) 140vw, 100vw"
         className="object-cover object-center"
       />
 

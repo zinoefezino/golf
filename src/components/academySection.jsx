@@ -6,179 +6,105 @@ const CARDS = [
     src: "/img9.avif",
     alt: "Golf balls and tees",
     label: "Elegant Clubhouse",
-    sub: "No downloads, no setup  join instantly, editors now use for them make data-driven decisions.",
-    size: "tall", // left tall card
+    sub: "A refined space for members to relax, connect, dine, and enjoy the club beyond the course.",
   },
   {
     id: 2,
-    src: "/img3.avif",
+    src: "/img5.avif",
     alt: "Golfer with glove",
     label: "Exclusive Events",
-    sub: "No downloads, no setup  join instantly, editors now use for them.",
-    size: "wide", // top right wide
+    sub: "Curated golf days, private tournaments, member socials, and unforgettable club experiences.",
   },
   {
     id: 3,
     src: "/img6.avif",
     alt: "Golf coaching session",
     label: "Pro Instructors",
-    sub: "No downloads, no setup  join instantly, editors now use for them.",
-    size: "wide", // bottom right wide (but visually taller than top — it bleeds down)
+    sub: "Personal coaching designed to improve your swing, sharpen your short game, and build confidence.",
   },
   {
     id: 4,
-    src: "/img11.avif",
+    src: "/img1.avif",
     alt: "Lush golf course landscape",
     label: "Lush Landscape & Water Features",
-    sub: "No downloads, no setup — join instantly, editors now use for them.",
-    size: "bottom", // full bottom strip
+    sub: "Scenic fairways, calm water features, and beautifully maintained greens made for memorable rounds.",
   },
 ];
 
-export default function AcademySection() {
+function Card({ card, className = "", textClassName = "", priority = false }) {
   return (
-    <section className="bg-[#F5F2EC] px-4 md:px-16 py-14 md:py-20">
-      {/* ── Header ── */}
-      <div className="text-center mb-12">
-        <p className="text-[#4A7C2F] text-sm font-semibold  mb-3">
-          Golf Academy
+    <article
+      className={`group relative overflow-hidden rounded-[1.75rem] bg-[#1A1A1A] shadow-sm ${className}`}
+    >
+      <Image
+        src={card.src}
+        alt={card.alt}
+        fill
+        priority={priority}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+
+      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/35 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-r from-black/30 via-transparent to-transparent" />
+
+      <div
+        className={`absolute bottom-0 left-0 right-0 p-5 md:p-6 ${textClassName}`}
+      >
+        <p className="mb-2 text-xl font-black leading-tight text-white md:text-2xl">
+          {card.label}
         </p>
-        <h1 className="text-[#1A1A1A] text-3xl md:text-5xl font-black leading-tight tracking-tight mb-4">
-          Professional Coaching &amp; Golf Academy
-        </h1>
-        <p className="text-[#777] text-sm md:text-base max-w-lg mx-auto leading-relaxed">
-          Locally sourced ingredients, gourmet meals, and sunset views. Latest
-          golf gear, branded apparel, and expert fitting services.
+        <p className="max-w-sm text-sm leading-relaxed text-white/65">
+          {card.sub}
         </p>
       </div>
+    </article>
+  );
+}
 
-      {/* ── Bento grid ── */}
-      {/*
-        Desktop layout (3 cols × 3 rows):
-        ┌──────────┬────────────────┐
-        │          │  Exclusive     │  row 1
-        │  Elegant │  Events        │
-        │ Clubhouse├────────────────┤
-        │          │  Pro           │  row 2
-        │  (tall)  │  Instructors   │
-        ├──────────┴────────────────┤
-        │  Lush Landscape (full)    │  row 3
-        └───────────────────────────┘
+export default function AcademySection() {
+  return (
+    <section className="bg-[#F5F2EC] px-4 py-14 md:px-16 md:py-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="mx-auto mb-12 max-w-2xl text-center">
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#4A7C2F]">
+            Golf Academy
+          </p>
 
-        Mobile: stacked single column
-      */}
-      <div
-        className="
-        grid gap-3
-        grid-cols-1
-        md:grid-cols-[2fr_3fr]
-        md:grid-rows-[220px_220px_240px]
-      "
-      >
-        {/* Card 1 – Elegant Clubhouse: spans 2 rows on desktop */}
-        <div
-          className="
-          relative rounded-2xl overflow-hidden group
-          h-56
-          md:col-start-1 md:row-start-1 md:row-span-2 md:h-full
-        "
-        >
-          <Image
-            src="/img9.avif"
-            alt="Golf balls and tees on green"
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 40vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-            <p className="text-white font-bold text-sm md:text-base leading-snug mb-1">
-              Elegant Clubhouse
-            </p>
-            <p className="text-white/65 text-xs leading-relaxed">
-              No downloads, no setup join instantly, editors now use for them
-              make data-driven decisions.
-            </p>
-          </div>
+          <h1 className="mb-4 text-3xl font-black leading-tight tracking-tight text-[#1A1A1A] md:text-5xl">
+            Professional Coaching &amp; Golf Academy
+          </h1>
+
+          <p className="mx-auto max-w-lg text-sm leading-relaxed text-[#777] md:text-base">
+            Improve your game with expert coaching, premium facilities, and a
+            club experience shaped around precision, calm, and confidence.
+          </p>
         </div>
 
-        {/* Card 2 – Exclusive Events: top right */}
-        <div
-          className="
-          relative rounded-2xl overflow-hidden group
-          h-48
-          md:col-start-2 md:row-start-1 md:h-full
-        "
-        >
-          <Image
-            src="/img5.avif"
-            alt="Golfer with glove"
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 60vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[2fr_3fr] md:grid-rows-[250px_250px_260px]">
+          <Card
+            card={CARDS[0]}
+            priority
+            className="h-80 md:col-start-1 md:row-span-2 md:h-full"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <p className="text-white font-bold text-sm leading-snug mb-1">
-              Exclusive Events
-            </p>
-            <p className="text-white/65 text-xs leading-relaxed">
-              No downloads, no setup join instantly, editors now use for them.
-            </p>
-          </div>
-        </div>
 
-        {/* Card 3 – Pro Instructors: bottom right */}
-        <div
-          className="
-          relative rounded-2xl overflow-hidden group
-          h-48
-          md:col-start-2 md:row-start-2 md:h-full
-        "
-        >
-          <Image
-            src="/img6.avif"
-            alt="Golf coaching session"
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 60vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          <Card
+            card={CARDS[1]}
+            className="h-64 md:col-start-2 md:row-start-1 md:h-full"
+            textClassName="md:max-w-md"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <p className="text-white font-bold text-sm leading-snug mb-1 ">
-              Pro Instructors
-            </p>
-            <p className="text-white/65 text-xs leading-relaxed">
-              No downloads, no setup join instantly, editors now use for them.
-            </p>
-          </div>
-        </div>
 
-        {/* Card 4 – Lush Landscape: full width bottom row */}
-        <div
-          className="
-          relative rounded-2xl overflow-hidden group
-          h-52
-          md:col-start-1 md:col-span-2 md:row-start-3 md:h-full
-        "
-        >
-          <Image
-            src="/img1.avif"
-            alt="Lush golf course landscape and water features"
-            fill
-            sizes="(max-width: 768px) 100vw, (min-width: 768px) 100vw"
-            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+          <Card
+            card={CARDS[2]}
+            className="h-64 md:col-start-2 md:row-start-2 md:h-full"
+            textClassName="md:max-w-md"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-            <p className="text-white font-bold text-sm md:text-base leading-snug mb-1">
-              Lush Landscape &amp; Water Features
-            </p>
-            <p className="text-white/65 text-xs leading-relaxed max-w-md">
-              No downloads, no setup join instantly, editors now use for them
-              make data-driven decisions.
-            </p>
-          </div>
+
+          <Card
+            card={CARDS[3]}
+            className="h-72 md:col-span-2 md:row-start-3 md:h-full"
+            textClassName="md:max-w-xl"
+          />
         </div>
       </div>
     </section>
