@@ -67,7 +67,7 @@ export default function ClubExperienceSection() {
     <section className="bg-[#F5F2EC] px-4 py-14 md:px-16 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-12 max-w-2xl text-center">
-          <h1 className="mb-4 text-5xl md:text-6xl tracking-tight font-black leading-tight text-[#1A1A1A] ">
+          <h1 className="mb-4 text-4xl md:text-6xl tracking-tight font-black leading-tight text-[#1A1A1A] ">
             Everything You Need for a Memorable Round
           </h1>
 

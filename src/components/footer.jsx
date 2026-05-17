@@ -19,7 +19,7 @@ export default function Footer() {
       <div className="px-4 md:px-16 pt-14 pb-12 flex flex-col md:flex-row md:items-center md:justify-between gap-8 border-b border-white/10">
         {/* Left – headline */}
         <div className="max-w-md">
-          <h1 className="text-3xl md:text-4xl font-black leading-tight tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight">
             Ready to Tee Off?
             <br />
             <span className="text-white/70 font-black">

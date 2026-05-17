@@ -30,15 +30,15 @@ export default function Hero() {
       <div className="relative z-10 flex min-h-svh flex-col justify-end px-5 pb-7 sm:px-8 lg:h-full lg:min-h-0 lg:px-10 lg:pb-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="max-w-5xl">
-            <h1 className="mb-4 text-4xl font-black leading-[1.02] tracking-tight text-white drop-shadow-xl sm:text-5xl md:text-6xl">
-              A New Standard
+            <h2 className="mb-4 text-4xl font-black leading-[1.02] tracking-tight text-white drop-shadow-xl sm:text-5xl md:text-6xl">
+              Perfect Your Game
               <br />
-              Of Golf Experience
-            </h1>
+              In Style
+            </h2>
 
             <p className="mb-6 max-w-sm text-sm leading-relaxed text-white/75 sm:text-base md:max-w-md md:text-lg">
-              Escape to pristine fairways, refined clubhouse experiences, and a
-              golf destination designed for players who appreciate the game.
+              A golf destination shaped by precision, calm, and natural beauty
+              where every round is designed to feel effortless and memorable.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
