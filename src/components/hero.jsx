@@ -11,9 +11,9 @@ const HERO_TAGS = [
 
 export default function Hero() {
   return (
-    <section className="relative h-screen min-h-160 overflow-hidden">
+    <section className="relative min-h-svh overflow-hidden lg:h-screen lg:min-h-160">
       <Image
-        src="/hero.webp"
+        src="/hero2.webp"
         alt="Golfer on lush fairway"
         fill
         priority
@@ -27,20 +27,18 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 flex h-full flex-col justify-end px-6 pb-8 sm:px-8 lg:px-10 lg:pb-10">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          {/* Bottom-left content */}
-          <div className="max-w-5xl ">
-            <h1 className=" text-white text-5xl md:text-6xl font-black leading-[1.05] tracking-tight mb-5 drop-shadow-xl">
+      <div className="relative z-10 flex min-h-svh flex-col justify-end px-5 pb-7 sm:px-8 lg:h-full lg:min-h-0 lg:px-10 lg:pb-10">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+          <div className="max-w-5xl">
+            <h1 className="mb-4 text-4xl font-black leading-[1.02] tracking-tight text-white drop-shadow-xl sm:text-5xl md:text-6xl">
               A New Standard
               <br />
               Of Golf Experience
             </h1>
 
-            <p className="mb-8 max-w-md text-base leading-relaxed text-white/75 md:text-lg">
+            <p className="mb-6 max-w-sm text-sm leading-relaxed text-white/75 sm:text-base md:max-w-md md:text-lg">
               Escape to pristine fairways, refined clubhouse experiences, and a
-              golf destination designed for players who appreciate the game at
-              its finest.
+              golf destination designed for players who appreciate the game.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -65,19 +63,20 @@ export default function Hero() {
 
               <Link
                 href="#"
-                className="rounded-full  border border-white/30 bg-white/15 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/25"
+                className="rounded-full border border-white/30 bg-white/15 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/25 sm:px-8"
               >
                 Discover
               </Link>
             </div>
           </div>
 
-          {/* Bottom-right tags on desktop */}
           <div className="flex max-w-md flex-wrap gap-2 lg:justify-end lg:pb-1">
             {HERO_TAGS.map((tag, i) => (
               <span
                 key={`${tag}-${i}`}
-                className="flex cursor-pointer items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-5 py-1.5 text-xs font-medium text-white/85 backdrop-blur-sm transition-all duration-200 hover:border-[#C8E650]/40 hover:bg-[#C8E650]/20"
+                className={`${
+                  i > 1 ? "hidden sm:flex" : "flex"
+                } cursor-pointer items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-white/85 backdrop-blur-sm transition-all duration-200 hover:border-[#C8E650]/40 hover:bg-[#C8E650]/20 sm:px-5`}
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-[#C8E650]" />
                 {tag}
