@@ -84,7 +84,7 @@ export default function AcademySection() {
         "
         >
           <Image
-            src="/hero.avif"
+            src="/img9.avif"
             alt="Golf balls and tees on green"
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 40vw"
