@@ -93,10 +93,10 @@ export default function Header() {
         {/* CTA */}
         <div className="hidden md:flex">
           <Link
-            href="/signup"
+            href="/login"
             className="group flex items-center gap-4 rounded-full bg-[#121212] py-1 pl-6 pr-1 text-sm font-medium text-white shadow-lg shadow-black/30 backdrop-blur-md transition-all duration-300 hover:bg-[#1E3517]"
           >
-            <span>Create Account</span>
+            <span>Login</span>
 
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C8E650] text-black transition-transform duration-300 group-hover:rotate-45">
               <svg
@@ -147,10 +147,10 @@ export default function Header() {
             ))}
 
             <Link
-              href="/signup"
+              href="/login"
               className="group mt-2 flex items-center justify-between rounded-full bg-[#121212] py-1.5 pl-5 pr-1.5 font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#2D4A1E]"
             >
-              <span>Create Account</span>
+              <span>Login</span>
 
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C8E650] text-[#121212] transition-transform duration-300 group-hover:rotate-45">
                 <svg
