@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TIMES = [
   "07:00 AM",
@@ -101,7 +102,7 @@ function InputField({ label, error, children }) {
 }
 
 const inputClass =
-  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-base text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
+  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
 
 export default function BookingPage() {
   const [step, setStep] = useState(0);
@@ -109,6 +110,7 @@ export default function BookingPage() {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const set = (field, val) => {
     setForm((f) => ({ ...f, [field]: val }));
@@ -140,13 +142,45 @@ export default function BookingPage() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    // await fetch("/api/bookings", { method: "POST", body: JSON.stringify(form) });
-    await new Promise((r) => setTimeout(r, 1400));
-    setLoading(false);
-    setSubmitted(true);
+    setApiError("");
+
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: form.date,
+          time: form.time,
+          players: form.players,
+          holes: form.holes,
+          cart: form.cart,
+          notes: form.notes,
+          guestInfo: {
+            firstName: form.firstName,
+            lastName: form.lastName,
+            email: form.email,
+            phone: form.phone,
+          },
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setApiError(
+          data.error || "Failed to create booking. Please try again.",
+        );
+        return;
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setApiError("Network error. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // ── Success screen ──
   if (submitted) {
     return (
       <div className="min-h-screen bg-[#F5F2EC] flex items-center justify-center px-4">
@@ -196,19 +230,17 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* ══ LEFT: Photo panel (desktop only) ══ */}
+      {/* ── LEFT: Photo panel ── */}
       <div className="hidden md:flex md:w-[42%]  shrink-0 sticky top-0 h-screen">
         <Image
           src="/img14.avif"
-          alt="Golf course fairway"
+          alt="Golf course"
           fill
           priority
           className="object-cover"
         />
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/20" />
 
-        {/* Logo */}
         <div className="absolute top-8 left-8 z-10">
           <Link href="/" className="flex items-center gap-2 group">
             <svg
@@ -233,7 +265,6 @@ export default function BookingPage() {
           </Link>
         </div>
 
-        {/* Bottom text */}
         <div className="absolute bottom-0 left-0 right-0 p-10 z-10">
           <p className="text-[#C8E650] text-sm font-semibold italic mb-3">
             Tee Time
@@ -247,13 +278,11 @@ export default function BookingPage() {
             No membership needed. Book in minutes and we'll send your
             confirmation straight to your inbox.
           </p>
-
-          {/* Info list */}
           <div className="flex flex-col gap-3">
             {[
               { icon: "🕗", text: "Tee times from 7:00 AM daily" },
               { icon: "⛳", text: "9 or 18 holes available" },
-              { icon: "🏌️", text: "Up to 4 players per booking" },
+              { icon: "👥", text: "Up to 4 players per booking" },
               { icon: "🛒", text: "Golf cart rental available" },
             ].map((item) => (
               <div key={item.text} className="flex items-center gap-3">
@@ -265,9 +294,8 @@ export default function BookingPage() {
         </div>
       </div>
 
-      {/* ══ RIGHT: Form panel ══ */}
+      {/* ── RIGHT: Form panel ── */}
       <div className="flex-1 bg-[#F5F2EC] flex flex-col overflow-y-auto">
-        {/* Mobile header */}
         <div className="md:hidden flex items-center justify-between px-6 py-5 bg-white border-b border-[#E8E4DC] sticky top-0 z-20">
           <Link href="/" className="flex items-center gap-2">
             <svg viewBox="0 0 32 32" className="h-7 w-7" aria-hidden="true">
@@ -281,7 +309,7 @@ export default function BookingPage() {
             className="flex items-center gap-1.5 text-sm font-semibold text-[#555] hover:text-[#2D4A1E] transition-colors group"
           >
             <svg
-              className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               strokeWidth="2.5"
@@ -294,7 +322,6 @@ export default function BookingPage() {
         </div>
 
         <div className="flex-1 flex flex-col justify-start px-6 md:px-12 py-10 max-w-2xl mx-auto w-full">
-          {/* Heading */}
           <div className="mb-8">
             <p className="text-[#4A7C2F] text-sm font-semibold italic mb-1">
               Book a Round
@@ -307,11 +334,28 @@ export default function BookingPage() {
             </p>
           </div>
 
-          {/* Form card */}
           <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-[#E8E4DC]">
             <StepIndicator current={step} />
 
-            {/* ── Step 0: Personal Details ── */}
+            {/* API error */}
+            {apiError && (
+              <div className="mb-5 bg-red-50 border border-red-200 text-red-600 text-xs font-medium px-4 py-3 rounded-xl flex items-center gap-2">
+                <svg
+                  className="w-4 h-4 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {apiError}
+              </div>
+            )}
+
+            {/* Step 0 */}
             {step === 0 && (
               <div className="flex flex-col gap-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -353,7 +397,7 @@ export default function BookingPage() {
               </div>
             )}
 
-            {/* ── Step 1: Date, Time & Preferences ── */}
+            {/* Step 1 */}
             {step === 1 && (
               <div className="flex flex-col gap-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -380,7 +424,6 @@ export default function BookingPage() {
                     </select>
                   </InputField>
                 </div>
-
                 <InputField label="Preferred Tee Time" error={errors.time}>
                   <div className="grid grid-cols-4 md:grid-cols-5 gap-2 mt-1">
                     {TIMES.map((t) => (
@@ -399,7 +442,6 @@ export default function BookingPage() {
                     ))}
                   </div>
                 </InputField>
-
                 <InputField label="Holes" error={errors.holes}>
                   <div className="flex gap-3">
                     {["9", "18"].map((h) => (
@@ -418,7 +460,6 @@ export default function BookingPage() {
                     ))}
                   </div>
                 </InputField>
-
                 <div className="flex items-center justify-between bg-[#F5F2EC] rounded-xl px-4 py-3.5">
                   <div>
                     <p className="text-sm font-semibold text-[#1A1A1A]">
@@ -438,12 +479,11 @@ export default function BookingPage() {
                     />
                   </button>
                 </div>
-
                 <InputField label="Special Requests (optional)">
                   <textarea
                     className={`${inputClass} resize-none`}
                     rows={3}
-                    placeholder="Any special requirements or notes..."
+                    placeholder="Any special requirements..."
                     value={form.notes}
                     onChange={(e) => set("notes", e.target.value)}
                   />
@@ -451,7 +491,7 @@ export default function BookingPage() {
               </div>
             )}
 
-            {/* ── Step 2: Confirm ── */}
+            {/* Step 2 */}
             {step === 2 && (
               <div className="flex flex-col gap-4">
                 <p className="text-[#888] text-sm mb-1">
@@ -497,24 +537,32 @@ export default function BookingPage() {
               </div>
             )}
 
-            {/* ── Navigation ── */}
+            {/* Navigation */}
             <div
               className={`flex mt-8 gap-3 ${step > 0 ? "justify-between" : "justify-end"}`}
             >
               {step > 0 && (
                 <button
                   onClick={back}
-                  className="px-6 py-3 rounded-full border-2 border-[#D0CCC4] text-sm font-semibold text-[#555] hover:border-[#1A1A1A] hover:text-[#1A1A1A] transition-all duration-200"
+                  className="px-6 items-center py-3 rounded-full border-2 border-[#D0CCC4] text-sm font-semibold text-[#555] hover:border-[#1A1A1A] hover:text-[#1A1A1A] transition-all duration-200"
                 >
-                  ← Back
+                  Back
+                  <ArrowLeft
+                    size={18}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
                 </button>
               )}
               {step < 2 ? (
                 <button
                   onClick={next}
-                  className="px-8 py-3 rounded-full bg-[#2D4A1E] text-white text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 shadow-md"
+                  className="group flex items-center gap-2 px-8 py-3 rounded-full bg-[#2D4A1E] text-white text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 shadow-md"
                 >
-                  Continue →
+                  Continue
+                  <ArrowRight
+                    size={18}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
                 </button>
               ) : (
                 <button

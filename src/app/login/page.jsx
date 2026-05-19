@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const inputClass =
-  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-base text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
+  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
 
 function PasswordInput({ value, onChange }) {
   const [show, setShow] = useState(false);
@@ -53,6 +55,7 @@ function PasswordInput({ value, onChange }) {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -81,11 +84,27 @@ export default function LoginPage() {
     if (!validate()) return;
     setLoading(true);
     setAuthError("");
-    // const res = await signIn("credentials", { email: form.email, password: form.password, redirect: false });
-    // if (res?.error) setAuthError("Invalid email or password.");
-    // else router.push("/member");
-    await new Promise((r) => setTimeout(r, 1200));
-    setLoading(false);
+
+    try {
+      const res = await signIn("credentials", {
+        email: form.email,
+        password: form.password,
+        redirect: false, // handle redirect manually
+      });
+
+      if (res?.error) {
+        setAuthError("Invalid email or password. Please try again.");
+        return;
+      }
+
+      // Success — go to member dashboard
+      router.push("/member/dashboard");
+      router.refresh(); // refresh server components to pick up new session
+    } catch (err) {
+      setAuthError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -93,16 +112,14 @@ export default function LoginPage() {
       {/* ── LEFT: Photo panel ── */}
       <div className="hidden md:flex md:w-[45%] relative shrink-0">
         <Image
-          src="/img11.avif"
+          src="/hero4.webp"
           alt="Golf course fairway"
           fill
           priority
           className="object-cover"
         />
-        {/* Overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/25" />
 
-        {/* Logo */}
         <div className="absolute top-8 left-8 z-10">
           <Link href="/" className="flex items-center gap-2 group">
             <svg viewBox="0 0 32 32" className="h-8 w-8" aria-hidden="true">
@@ -123,7 +140,6 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Bottom text */}
         <div className="absolute bottom-0 left-0 right-0 p-10 z-10">
           <p className="text-[#C8E650] text-sm font-semibold italic mb-3">
             Welcome Back
@@ -170,13 +186,15 @@ export default function LoginPage() {
             </svg>
             <span className="text-lg font-bold text-[#1A1A1A]">Golf</span>
           </Link>
-          <Link href="/signup" className="text-sm font-semibold text-[#2D4A1E]">
+          <Link
+            href="/sign-up"
+            className="text-sm font-semibold text-[#2D4A1E]"
+          >
             Sign up
           </Link>
         </div>
 
         <div className="flex-1 flex flex-col justify-center px-6 md:px-16 py-10 max-w-md mx-auto w-full">
-          {/* Heading */}
           <div className="mb-8">
             <p className="text-[#4A7C2F] text-sm font-semibold italic mb-1">
               Members
@@ -187,7 +205,7 @@ export default function LoginPage() {
             <p className="text-[#888] text-sm">
               No account?{" "}
               <Link
-                href="/signup"
+                href="/sign-up"
                 className="text-[#2D4A1E] font-semibold hover:underline"
               >
                 Sign up free
@@ -195,7 +213,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Form */}
           <div className="flex flex-col gap-5">
             {/* Auth error */}
             {authError && (
@@ -226,6 +243,7 @@ export default function LoginPage() {
                 placeholder="john@example.com"
                 value={form.email}
                 onChange={(e) => set("email", e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
               />
               {errors.email && (
                 <p className="text-red-500 text-xs">{errors.email}</p>
@@ -320,7 +338,6 @@ export default function LoginPage() {
               <div className="flex-1 h-px bg-[#E0DDD6]" />
             </div>
 
-            {/* Guest option */}
             <Link
               href="/booking"
               className="w-full text-center border-2 border-[#E0DDD6] bg-white text-[#555] font-semibold text-sm py-3 rounded-full hover:border-[#2D4A1E] hover:text-[#2D4A1E] transition-all duration-200"
@@ -328,6 +345,16 @@ export default function LoginPage() {
               Book as Guest Instead
             </Link>
           </div>
+
+          <p className="text-center text-xs text-[#aaa] mt-6">
+            Don't have an account?{" "}
+            <Link
+              href="/sign-up"
+              className="text-[#2D4A1E] font-semibold hover:underline"
+            >
+              Sign up free
+            </Link>
+          </p>
         </div>
       </div>
     </div>

@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const inputClass =
-  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-base text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
+  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
 
 function InputField({ label, error, children }) {
   return (
@@ -103,14 +104,17 @@ const initialForm = {
 };
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
   const [done, setDone] = useState(false);
 
   const set = (field, val) => {
     setForm((f) => ({ ...f, [field]: val }));
     setErrors((e) => ({ ...e, [field]: "" }));
+    setApiError("");
   };
 
   const validate = () => {
@@ -130,10 +134,35 @@ export default function SignUpPage() {
   const handleSubmit = async () => {
     if (!validate()) return;
     setLoading(true);
-    // await fetch("/api/register", { method: "POST", body: JSON.stringify(form) });
-    await new Promise((r) => setTimeout(r, 1400));
-    setLoading(false);
-    setDone(true);
+    setApiError("");
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          phone: form.phone,
+          password: form.password,
+          membershipType: form.membership,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setApiError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+
+      setDone(true);
+    } catch (err) {
+      setApiError("Network error. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (done) {
@@ -159,7 +188,7 @@ export default function SignUpPage() {
             Log in to start booking your rounds.
           </p>
           <Link
-            href="/auth/login"
+            href="/login"
             className="w-full bg-[#2D4A1E] text-white font-bold text-sm py-3.5 rounded-full hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 text-center"
           >
             Go to Login
@@ -179,18 +208,15 @@ export default function SignUpPage() {
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* ── LEFT: Photo panel ── */}
       <div className="hidden md:flex md:w-[45%] relative shrink-0">
-        {/* Photo */}
         <Image
-          src="/img2.avif"
+          src="/hero.webp"
           alt="Golf course at dawn"
           fill
           priority
           className="object-cover"
         />
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-black/20" />
 
-        {/* Logo top-left */}
         <div className="absolute top-8 left-8 z-10">
           <Link href="/" className="group flex items-center gap-2">
             <svg viewBox="0 0 32 32" className="h-8 w-8" aria-hidden="true">
@@ -211,7 +237,6 @@ export default function SignUpPage() {
           </Link>
         </div>
 
-        {/* Text at bottom */}
         <div className="absolute bottom-0 left-0 right-0 p-10 z-10">
           <p className="text-[#C8E650] text-sm font-semibold italic mb-3">
             Join the Club
@@ -225,7 +250,6 @@ export default function SignUpPage() {
             Create your account and get access to priority bookings, member
             discounts, and exclusive course events.
           </p>
-          {/* Member badges */}
           <div className="flex flex-wrap gap-2 mt-6">
             {[
               "Priority Booking",
@@ -261,7 +285,6 @@ export default function SignUpPage() {
         </div>
 
         <div className="flex-1 flex flex-col justify-center px-6 md:px-12 py-10 max-w-lg mx-auto w-full">
-          {/* Heading */}
           <div className="mb-8">
             <p className="text-[#4A7C2F] text-sm font-semibold italic mb-1">
               Get Started
@@ -280,7 +303,24 @@ export default function SignUpPage() {
             </p>
           </div>
 
-          {/* Form */}
+          {/* API error banner */}
+          {apiError && (
+            <div className="mb-5 bg-red-50 border border-red-200 text-red-600 text-xs font-medium px-4 py-3 rounded-xl flex items-center gap-2">
+              <svg
+                className="w-4 h-4 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              {apiError}
+            </div>
+          )}
+
           <div className="flex flex-col gap-5">
             <div className="grid grid-cols-2 gap-4">
               <InputField label="First Name" error={errors.firstName}>
