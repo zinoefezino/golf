@@ -36,7 +36,7 @@ const TIMES = [
   "04:30 PM",
 ];
 
-const STEPS = ["Details", "Date & Time", "Confirm"];
+const STEPS = ["Details", "Schedule", "Confirm"];
 
 const initialForm = {
   firstName: "",
@@ -213,7 +213,7 @@ export default function BookingPage() {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
 
         <div className="absolute top-8 left-8 z-10">
           <Link href="/" className="flex items-center gap-2 group">
