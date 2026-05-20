@@ -98,6 +98,23 @@ export default function MemberNav({ active }) {
     ? `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase()
     : "?";
 
+  const avatarUrl = user?.avatar || "";
+
+  const Avatar = ({ className, fallbackClassName }) => {
+    if (avatarUrl) {
+      return (
+        <img
+          src={avatarUrl}
+          alt="Profile"
+          className={className}
+          referrerPolicy="no-referrer"
+        />
+      );
+    }
+
+    return <div className={fallbackClassName}>{initials}</div>;
+  };
+
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/" });
   };
@@ -145,8 +162,11 @@ export default function MemberNav({ active }) {
 
           {/* Avatar + logout */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#2D4A1E] flex items-center justify-center text-white text-sm font-bold shrink-0">
-              {initials}
+            <div className="w-9 h-9 rounded-full bg-[#2D4A1E] flex items-center justify-center text-white text-sm font-bold shrink-0 overflow-hidden">
+              <Avatar
+                className="w-full h-full object-cover"
+                fallbackClassName="w-full h-full flex items-center justify-center text-white text-sm font-bold"
+              />
             </div>
             <button
               onClick={handleLogout}
@@ -174,8 +194,11 @@ export default function MemberNav({ active }) {
 
           {/* Avatar + logout */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#2D4A1E] flex items-center justify-center text-white text-xs font-bold">
-              {initials}
+            <div className="w-8 h-8 rounded-full bg-[#2D4A1E] flex items-center justify-center text-white text-xs font-bold overflow-hidden">
+              <Avatar
+                className="w-full h-full object-cover"
+                fallbackClassName="w-full h-full flex items-center justify-center text-white text-xs font-bold"
+              />
             </div>
             <button
               onClick={handleLogout}
