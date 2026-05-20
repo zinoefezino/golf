@@ -234,7 +234,7 @@ export default function DashboardPage() {
                         </span>
 
                         <span className="inline-flex items-center gap-1">
-                          <Trophy className="w-3.5 h-3.5" />
+                          <Flag className="w-3.5 h-3.5" />
                           {b.holes} holes
                         </span>
 
