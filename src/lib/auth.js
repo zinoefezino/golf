@@ -46,6 +46,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           lastName: user.lastName,
           membershipType: user.membershipType,
           avatar: user.avatar,
+          createdAt: user.createdAt?.toISOString(),
         };
       },
     }),
@@ -60,6 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.lastName = user.lastName;
         token.membershipType = user.membershipType;
         token.avatar = user.avatar;
+        token.createdAt = user.createdAt;
       }
       return token;
     },
@@ -72,6 +74,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.lastName = token.lastName;
         session.user.membershipType = token.membershipType;
         session.user.avatar = token.avatar;
+        session.user.createdAt = token.createdAt;
       }
       return session;
     },

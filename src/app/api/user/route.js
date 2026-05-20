@@ -3,6 +3,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import User from "@/models/User";
+import Booking from "@/models/Booking";
 
 // ── Validation ──
 const ProfileSchema = z.object({
@@ -64,6 +65,35 @@ export async function PATCH(req) {
     console.error("PATCH profile error:", error);
     return NextResponse.json(
       { error: "Failed to update profile" },
+      { status: 500 },
+    );
+  }
+}
+
+// ── DELETE: delete account + all bookings ──
+export async function DELETE() {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+    }
+
+    await connectDB();
+
+    // Delete all bookings belonging to this user
+    await Booking.deleteMany({ userId: session.user.id });
+
+    // Delete the user account
+    await User.findByIdAndDelete(session.user.id);
+
+    return NextResponse.json(
+      { message: "Account deleted successfully" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("DELETE user error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete account" },
       { status: 500 },
     );
   }

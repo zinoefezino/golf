@@ -80,7 +80,9 @@ export default function DashboardPage() {
     { label: "Membership", value: user?.membershipType ?? "—" },
     {
       label: "Member Since",
-      value: user?.createdAt ? new Date(user.createdAt).getFullYear() : "—",
+      value: user?.createdAt
+        ? new Date(user.createdAt).getFullYear()
+        : new Date().getFullYear(),
     },
   ];
 
