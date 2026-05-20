@@ -11,6 +11,7 @@ import {
   Users,
   MapPin,
   Circle,
+  ArrowBigLeftDash,
 } from "lucide-react";
 
 const TIMES = [
@@ -284,6 +285,16 @@ export default function BookingPage() {
       <div className="flex-1 bg-[#F5F2EC] flex flex-col overflow-y-auto">
         <div className="flex-1 px-6 md:px-12 py-10 max-w-2xl mx-auto w-full">
           <div className="mb-8">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-sm font-semibold text-[#888] hover:text-[#2D4A1E] mb-6 group w-fit"
+            >
+              <ArrowLeft
+                size={18}
+                className="group-hover:-translate-x-1 transition-transform"
+              />
+              Back to Home
+            </Link>
             <p className="text-[#4A7C2F] text-sm font-semibold italic mb-1">
               Book a Round
             </p>
