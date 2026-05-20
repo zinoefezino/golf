@@ -44,6 +44,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
+          phone: user.phone,
+          bio: user.bio,
           membershipType: user.membershipType,
           avatar: user.avatar,
           createdAt: user.createdAt?.toISOString(),
@@ -54,14 +56,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   callbacks: {
     // ── Add extra fields to the JWT token ──
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
+        token.phone = user.phone;
+        token.bio = user.bio;
         token.membershipType = user.membershipType;
         token.avatar = user.avatar;
         token.createdAt = user.createdAt;
+      }
+      // ── Handle session update() calls from the client ──
+      if (trigger === "update" && session) {
+        if (session.firstName) token.firstName = session.firstName;
+        if (session.lastName) token.lastName = session.lastName;
+        if (session.phone) token.phone = session.phone;
+        if (session.bio !== undefined) token.bio = session.bio;
+        if (session.avatar !== undefined) token.avatar = session.avatar;
       }
       return token;
     },
@@ -72,6 +84,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id;
         session.user.firstName = token.firstName;
         session.user.lastName = token.lastName;
+        session.user.phone = token.phone;
+        session.user.bio = token.bio;
         session.user.membershipType = token.membershipType;
         session.user.avatar = token.avatar;
         session.user.createdAt = token.createdAt;

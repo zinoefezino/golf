@@ -96,10 +96,13 @@ export default function ProfilePage() {
         return;
       }
 
-      // Update session so nav initials refresh
+      // Update session so all fields reflect immediately without re-login
       await update({
         firstName: form.firstName,
         lastName: form.lastName,
+        phone: form.phone,
+        bio: form.bio,
+        avatar: form.avatar,
       });
 
       setOriginalForm(form);
@@ -138,7 +141,7 @@ export default function ProfilePage() {
 
   const memberYear = user?.createdAt
     ? new Date(user.createdAt).getFullYear()
-    : "—";
+    : new Date().getFullYear();
 
   return (
     <div className="min-h-screen bg-[#F5F2EC]">
@@ -378,21 +381,25 @@ export default function ProfilePage() {
 
         {/* Sticky bottom save bar */}
         {isDirty && (
-          <div className="sticky bottom-20 md:bottom-4 bg-white border border-[#E8E4DC] rounded-2xl px-6 py-4 shadow-lg flex items-center justify-between gap-4">
-            <p className="text-sm text-[#888] font-medium">
-              You have unsaved changes.
+          <div className="sticky bottom-24 md:bottom-4 bg-white border border-[#E8E4DC] rounded-2xl px-4 md:px-6 py-3 md:py-4 shadow-lg flex items-center justify-between gap-3 md:gap-4">
+            {/* Message */}
+            <p className="text-xs md:text-sm text-[#888] font-medium">
+              Unsaved changes
             </p>
-            <div className="flex gap-3">
+
+            {/* Buttons */}
+            <div className="flex items-center gap-2 md:gap-3">
               <button
                 onClick={handleDiscard}
-                className="px-5 py-2.5 rounded-full border-2 border-[#D0CCC4] text-sm font-semibold text-[#555] hover:border-[#1A1A1A] transition-all"
+                className="px-4 py-2 md:py-2.5 rounded-full border border-[#D0CCC4] text-xs md:text-sm font-semibold text-[#555] hover:border-[#1A1A1A] transition-all"
               >
                 Discard
               </button>
+
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-5 py-2.5 rounded-full bg-[#2D4A1E] text-white text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 disabled:opacity-60 flex items-center gap-2"
+                className="px-4 py-2 md:py-2.5 rounded-full bg-[#2D4A1E] text-white text-xs md:text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 disabled:opacity-60 flex items-center gap-2"
               >
                 {saving ? (
                   <>
@@ -415,10 +422,10 @@ export default function ProfilePage() {
                         d="M4 12a8 8 0 018-8v8z"
                       />
                     </svg>
-                    Saving...
+                    Saving
                   </>
                 ) : (
-                  "Save Changes"
+                  "Save"
                 )}
               </button>
             </div>
