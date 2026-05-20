@@ -1,29 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-
-// ── Mock user (replace with session data later) ──
-const INITIAL_USER = {
-  firstName: "James",
-  lastName: "Davidson",
-  email: "james@example.com",
-  phone: "+1 (555) 012-3456",
-  avatar: "JD",
-  membershipType: "Premium",
-  memberSince: "2022",
-  bio: "",
-};
-
-const NAV_LINKS = [
-  { label: "Dashboard", href: "/member/dashboard" },
-  { label: "Bookings", href: "/member/bookings" },
-  { label: "Profile", href: "/member/profile" },
-  { label: "Settings", href: "/member/settings" },
-];
+import { useSession } from "next-auth/react";
+import MemberNav from "@/components/membernav";
 
 const inputClass =
-  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
+  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-base text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
 
 function InputField({ label, hint, error, children }) {
   return (
@@ -41,22 +24,49 @@ function InputField({ label, hint, error, children }) {
 }
 
 export default function ProfilePage() {
-  const [user, setUser] = useState(INITIAL_USER);
-  const [form, setForm] = useState(INITIAL_USER);
+  const { data: session, update } = useSession();
+  const user = session?.user;
+
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    bio: "",
+    avatar: "",
+  });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [apiError, setApiError] = useState("");
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [originalForm, setOriginalForm] = useState(null);
   const fileRef = useRef(null);
+
+  // ── Populate form from session ──
+  useEffect(() => {
+    if (user) {
+      const initial = {
+        firstName: user.firstName ?? "",
+        lastName: user.lastName ?? "",
+        phone: user.phone ?? "",
+        bio: user.bio ?? "",
+        avatar: user.avatar ?? "",
+      };
+      setForm(initial);
+      setOriginalForm(initial);
+    }
+  }, [user]);
 
   const set = (field, val) => {
     setForm((f) => ({ ...f, [field]: val }));
     setErrors((e) => ({ ...e, [field]: "" }));
     setSaved(false);
+    setApiError("");
   };
 
-  const isDirty =
-    JSON.stringify(form) !== JSON.stringify(user) || avatarPreview;
+  const isDirty = originalForm
+    ? JSON.stringify(form) !== JSON.stringify(originalForm) || avatarPreview
+    : false;
 
   const validate = () => {
     const e = {};
@@ -70,93 +80,71 @@ export default function ProfilePage() {
   const handleSave = async () => {
     if (!validate()) return;
     setSaving(true);
-    // await fetch("/api/user/profile", { method: "PATCH", body: JSON.stringify(form) });
-    await new Promise((r) => setTimeout(r, 1200));
-    setUser(form);
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    setApiError("");
+
+    try {
+      const res = await fetch("/api/user", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setApiError(data.error || "Failed to update profile.");
+        return;
+      }
+
+      // Update session so nav initials refresh
+      await update({
+        firstName: form.firstName,
+        lastName: form.lastName,
+      });
+
+      setOriginalForm(form);
+      setAvatarPreview(null);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (err) {
+      setApiError("Network error. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleAvatarChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => setAvatarPreview(reader.result);
+    reader.onload = () => {
+      setAvatarPreview(reader.result);
+      set("avatar", reader.result);
+    };
     reader.readAsDataURL(file);
-    setSaved(false);
   };
 
   const handleDiscard = () => {
-    setForm(user);
+    if (originalForm) setForm(originalForm);
     setAvatarPreview(null);
     setErrors({});
     setSaved(false);
+    setApiError("");
   };
+
+  const initials = user
+    ? `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase()
+    : "?";
+
+  const memberYear = user?.createdAt
+    ? new Date(user.createdAt).getFullYear()
+    : "—";
 
   return (
     <div className="min-h-screen bg-[#F5F2EC]">
-      {/* ── Nav ── */}
-      <header className="bg-white border-b border-[#E8E4DC] sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <svg
-              viewBox="0 0 32 32"
-              className="h-8 w-8 group-hover:scale-110 transition-transform duration-300"
-              aria-hidden="true"
-            >
-              <path d="M16 2 A14 14 0 0 0 16 30 Z" fill="#4A7C2F" />
-              <path d="M16 2 A14 14 0 0 1 16 30 Z" fill="#C8E650" />
-              <circle
-                cx="16"
-                cy="16"
-                r="14"
-                fill="none"
-                stroke="#4A7C2F"
-                strokeWidth="0.5"
-              />
-            </svg>
-            <span className="text-xl font-bold tracking-tight text-[#1A1A1A]">
-              Golf
-            </span>
-          </Link>
+      <MemberNav />
 
-          <nav className="hidden md:flex items-center gap-6">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className={`text-sm font-semibold transition-colors duration-200 ${
-                  l.label === "Profile"
-                    ? "text-[#2D4A1E]"
-                    : "text-[#888] hover:text-[#1A1A1A]"
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#2D4A1E] flex items-center justify-center text-white text-sm font-bold overflow-hidden">
-              {avatarPreview ? (
-                <img
-                  src={avatarPreview}
-                  alt="avatar"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                user.avatar
-              )}
-            </div>
-            <button className="hidden md:block text-xs font-semibold text-[#888] hover:text-red-500 transition-colors">
-              Log out
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-3xl mx-auto px-6 md:px-10 py-10 flex flex-col gap-8">
+      <main className="max-w-3xl mx-auto px-5 md:px-10 py-8 md:py-10 pb-24 md:pb-10 flex flex-col gap-8">
         {/* ── Page header ── */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -168,7 +156,6 @@ export default function ProfilePage() {
             </h1>
           </div>
 
-          {/* Save / discard – shows only when dirty */}
           {isDirty && (
             <div className="flex items-center gap-3 self-start md:self-auto">
               <button
@@ -212,7 +199,6 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Saved toast */}
           {saved && !isDirty && (
             <div className="flex items-center gap-2 bg-[#C8E650]/20 border border-[#C8E650] text-[#2D4A1E] text-sm font-semibold px-4 py-2 rounded-full self-start md:self-auto">
               <svg
@@ -229,37 +215,49 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* ── Avatar section ── */}
+        {/* API error */}
+        {apiError && (
+          <div className="bg-red-50 border border-red-200 text-red-600 text-xs font-medium px-4 py-3 rounded-xl flex items-center gap-2">
+            <svg
+              className="w-4 h-4 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {apiError}
+          </div>
+        )}
+
+        {/* ── Avatar ── */}
         <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E8E4DC] flex flex-col gap-6">
           <h2 className="text-base font-black text-[#1A1A1A]">Profile Photo</h2>
-
           <div className="flex items-center gap-6">
-            {/* Avatar preview */}
             <div className="relative shrink-0">
               <div className="w-20 h-20 rounded-full bg-[#2D4A1E] flex items-center justify-center text-white text-2xl font-black overflow-hidden border-4 border-[#E8E4DC]">
-                {avatarPreview ? (
+                {avatarPreview || form.avatar ? (
                   <img
-                    src={avatarPreview}
+                    src={avatarPreview || form.avatar}
                     alt="avatar"
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  user.avatar
+                  initials
                 )}
               </div>
-              {/* Badge */}
-              <span className="absolute -bottom-1 -right-1 bg-[#C8E650] text-[#1A1A1A] text-xs font-bold px-2 py-0.5 rounded-full border-2 border-white">
-                {user.membershipType}
+              <span className="absolute -bottom-1 -right-1 bg-[#C8E650] text-[#1A1A1A] text-xs font-bold px-2 py-0.5 rounded-full border-2 border-white capitalize">
+                {user?.membershipType}
               </span>
             </div>
-
             <div className="flex flex-col gap-2">
               <p className="text-sm font-bold text-[#1A1A1A]">
-                {user.firstName} {user.lastName}
+                {form.firstName} {form.lastName}
               </p>
-              <p className="text-xs text-[#888]">
-                Member since {user.memberSince}
-              </p>
+              <p className="text-xs text-[#888]">Member since {memberYear}</p>
               <div className="flex gap-2 mt-1">
                 <button
                   onClick={() => fileRef.current?.click()}
@@ -269,7 +267,10 @@ export default function ProfilePage() {
                 </button>
                 {avatarPreview && (
                   <button
-                    onClick={() => setAvatarPreview(null)}
+                    onClick={() => {
+                      setAvatarPreview(null);
+                      set("avatar", originalForm?.avatar ?? "");
+                    }}
                     className="text-xs font-semibold text-red-400 hover:text-red-600 px-3 py-1.5 rounded-full border border-red-200 hover:border-red-400 transition-all"
                   >
                     Remove
@@ -279,7 +280,6 @@ export default function ProfilePage() {
               <p className="text-xs text-[#bbb]">JPG or PNG. Max 2MB.</p>
             </div>
           </div>
-
           <input
             ref={fileRef}
             type="file"
@@ -294,7 +294,6 @@ export default function ProfilePage() {
           <h2 className="text-base font-black text-[#1A1A1A]">
             Personal Information
           </h2>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <InputField label="First Name" error={errors.firstName}>
               <input
@@ -313,18 +312,16 @@ export default function ProfilePage() {
               />
             </InputField>
           </div>
-
           <InputField
             label="Email Address"
             hint="Contact support to change email"
           >
             <input
               className={`${inputClass} opacity-60 cursor-not-allowed`}
-              value={form.email}
+              value={user?.email ?? ""}
               disabled
             />
           </InputField>
-
           <InputField label="Phone Number" error={errors.phone}>
             <input
               className={inputClass}
@@ -334,7 +331,6 @@ export default function ProfilePage() {
               onChange={(e) => set("phone", e.target.value)}
             />
           </InputField>
-
           <InputField label="Bio" hint="Optional">
             <textarea
               className={`${inputClass} resize-none`}
@@ -346,14 +342,13 @@ export default function ProfilePage() {
           </InputField>
         </div>
 
-        {/* ── Membership info (read only) ── */}
+        {/* ── Membership (read only) ── */}
         <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E8E4DC] flex flex-col gap-5">
           <h2 className="text-base font-black text-[#1A1A1A]">Membership</h2>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { label: "Membership Type", value: user.membershipType },
-              { label: "Member Since", value: user.memberSince },
+              { label: "Membership Type", value: user?.membershipType ?? "—" },
+              { label: "Member Since", value: memberYear },
               { label: "Status", value: "Active" },
             ].map((item) => (
               <div
@@ -363,13 +358,12 @@ export default function ProfilePage() {
                 <span className="text-xs text-[#888] font-medium uppercase tracking-wide">
                   {item.label}
                 </span>
-                <span className="text-sm font-black text-[#1A1A1A]">
+                <span className="text-sm font-black text-[#1A1A1A] capitalize">
                   {item.value}
                 </span>
               </div>
             ))}
           </div>
-
           <p className="text-xs text-[#aaa]">
             To upgrade or change your membership,{" "}
             <Link
@@ -382,9 +376,9 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        {/* ── Bottom save bar (visible when dirty) ── */}
+        {/* Sticky bottom save bar */}
         {isDirty && (
-          <div className="sticky bottom-4 bg-white border border-[#E8E4DC] rounded-2xl px-6 py-4 shadow-lg flex items-center justify-between gap-4">
+          <div className="sticky bottom-20 md:bottom-4 bg-white border border-[#E8E4DC] rounded-2xl px-6 py-4 shadow-lg flex items-center justify-between gap-4">
             <p className="text-sm text-[#888] font-medium">
               You have unsaved changes.
             </p>

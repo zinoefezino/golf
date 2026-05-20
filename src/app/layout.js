@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <providers>{children}</providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

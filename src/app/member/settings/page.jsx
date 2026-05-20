@@ -1,17 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-
-const NAV_LINKS = [
-  { label: "Dashboard", href: "/member/dashboard" },
-  { label: "Bookings", href: "/member/bookings" },
-  { label: "Profile", href: "/member/profile" },
-  { label: "Settings", href: "/member/settings" },
-];
+import { signOut } from "next-auth/react";
+import MemberNav from "@/components/membernav";
 
 const inputClass =
-  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
+  "w-full bg-[#F5F2EC] border border-[#E0DDD6] rounded-xl px-4 py-3 text-base text-[#1A1A1A] placeholder:text-[#bbb] focus:outline-none focus:border-[#C8E650] focus:ring-2 focus:ring-[#C8E650]/30 transition-all duration-200";
 
 function PasswordInput({ placeholder, value, onChange }) {
   const [show, setShow] = useState(false);
@@ -84,10 +78,12 @@ export default function SettingsPage() {
   const [pwErrors, setPwErrors] = useState({});
   const [pwSaving, setPwSaving] = useState(false);
   const [pwSaved, setPwSaved] = useState(false);
+  const [pwApiError, setPwApiError] = useState("");
 
   const setPw = (field, val) => {
     setPwForm((f) => ({ ...f, [field]: val }));
     setPwErrors((e) => ({ ...e, [field]: "" }));
+    setPwApiError("");
   };
 
   const validatePw = () => {
@@ -102,12 +98,30 @@ export default function SettingsPage() {
   const handlePwSave = async () => {
     if (!validatePw()) return;
     setPwSaving(true);
-    // await fetch("/api/user/change-password", { method: "POST", body: JSON.stringify(pwForm) });
-    await new Promise((r) => setTimeout(r, 1200));
-    setPwSaving(false);
-    setPwSaved(true);
-    setPwForm({ current: "", newPw: "", confirm: "" });
-    setTimeout(() => setPwSaved(false), 3000);
+    setPwApiError("");
+
+    try {
+      const res = await fetch("/api/user/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ current: pwForm.current, newPw: pwForm.newPw }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setPwApiError(data.error || "Failed to update password.");
+        return;
+      }
+
+      setPwSaved(true);
+      setPwForm({ current: "", newPw: "", confirm: "" });
+      setTimeout(() => setPwSaved(false), 3000);
+    } catch (err) {
+      setPwApiError("Network error. Please try again.");
+    } finally {
+      setPwSaving(false);
+    }
   };
 
   // ── Notifications ──
@@ -118,68 +132,29 @@ export default function SettingsPage() {
     promotions: false,
     newsletter: false,
   });
-
   const toggleNotif = (key) => setNotifs((n) => ({ ...n, [key]: !n[key] }));
 
   // ── Delete account ──
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      await fetch("/api/user", { method: "DELETE" });
+      await signOut({ callbackUrl: "/" });
+    } catch (err) {
+      console.error("Delete account error:", err);
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F5F2EC]">
-      {/* ── Nav ── */}
-      <header className="bg-white border-b border-[#E8E4DC] sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <svg
-              viewBox="0 0 32 32"
-              className="h-8 w-8 group-hover:scale-110 transition-transform duration-300"
-              aria-hidden="true"
-            >
-              <path d="M16 2 A14 14 0 0 0 16 30 Z" fill="#4A7C2F" />
-              <path d="M16 2 A14 14 0 0 1 16 30 Z" fill="#C8E650" />
-              <circle
-                cx="16"
-                cy="16"
-                r="14"
-                fill="none"
-                stroke="#4A7C2F"
-                strokeWidth="0.5"
-              />
-            </svg>
-            <span className="text-xl font-bold tracking-tight text-[#1A1A1A]">
-              Golf
-            </span>
-          </Link>
+      <MemberNav />
 
-          <nav className="hidden md:flex items-center gap-6">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className={`text-sm font-semibold transition-colors duration-200 ${
-                  l.label === "Settings"
-                    ? "text-[#2D4A1E]"
-                    : "text-[#888] hover:text-[#1A1A1A]"
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#2D4A1E] flex items-center justify-center text-white text-sm font-bold">
-              JD
-            </div>
-            <button className="hidden md:block text-xs font-semibold text-[#888] hover:text-red-500 transition-colors">
-              Log out
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-3xl mx-auto px-6 md:px-10 py-10 flex flex-col gap-8">
+      <main className="max-w-3xl mx-auto px-5 md:px-10 py-8 md:py-10 pb-24 md:pb-10 flex flex-col gap-8">
         {/* ── Page header ── */}
         <div>
           <p className="text-[#4A7C2F] text-sm font-semibold italic mb-1">
@@ -192,7 +167,7 @@ export default function SettingsPage() {
 
         {/* ── Change password ── */}
         <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E8E4DC] flex flex-col gap-5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-3">
             <h2 className="text-base font-black text-[#1A1A1A]">
               Change Password
             </h2>
@@ -211,6 +186,23 @@ export default function SettingsPage() {
               </div>
             )}
           </div>
+
+          {pwApiError && (
+            <div className="bg-red-50 border border-red-200 text-red-600 text-xs font-medium px-4 py-3 rounded-xl flex items-center gap-2">
+              <svg
+                className="w-4 h-4 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              {pwApiError}
+            </div>
+          )}
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
@@ -293,7 +285,6 @@ export default function SettingsPage() {
           <h2 className="text-base font-black text-[#1A1A1A] mb-3">
             Email Notifications
           </h2>
-
           <Toggle
             label="Booking Confirmation"
             sub="Get an email when a booking is confirmed"
@@ -342,7 +333,7 @@ export default function SettingsPage() {
         </div>
       </main>
 
-      {/* ── Delete account modal ── */}
+      {/* ── Delete modal ── */}
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center px-4">
           <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-xl flex flex-col gap-5">
@@ -383,14 +374,36 @@ export default function SettingsPage() {
                 Cancel
               </button>
               <button
-                disabled={deleteInput !== "DELETE"}
-                onClick={() => {
-                  // await fetch("/api/user", { method: "DELETE" });
-                  // signOut({ callbackUrl: "/" });
-                }}
-                className="flex-1 bg-red-500 text-white font-semibold text-sm py-2.5 rounded-full hover:bg-red-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={deleteInput !== "DELETE" || deleting}
+                onClick={handleDeleteAccount}
+                className="flex-1 bg-red-500 text-white font-semibold text-sm py-2.5 rounded-full hover:bg-red-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Delete
+                {deleting ? (
+                  <>
+                    <svg
+                      className="w-4 h-4 animate-spin"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8z"
+                      />
+                    </svg>
+                    Deleting...
+                  </>
+                ) : (
+                  "Delete"
+                )}
               </button>
             </div>
           </div>
