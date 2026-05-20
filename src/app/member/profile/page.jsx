@@ -455,50 +455,62 @@ export default function ProfilePage() {
         </div>
 
         {/* ── Sticky bottom save bar ── */}
+        {/* ── Sticky bottom save bar ── */}
         {isDirty && (
-          <div className="sticky bottom-20 md:bottom-4 bg-white border border-[#E8E4DC] rounded-2xl px-6 py-4 shadow-lg flex items-center justify-between gap-4">
-            <p className="text-sm text-[#888] font-medium">
-              You have unsaved changes.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={handleDiscard}
-                className="px-5 py-2.5 rounded-full border-2 border-[#D0CCC4] text-sm font-semibold text-[#555] hover:border-[#1A1A1A] transition-all"
-              >
-                Discard
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={saving || uploading}
-                className="px-5 py-2.5 rounded-full bg-[#2D4A1E] text-white text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 disabled:opacity-60 flex items-center gap-2"
-              >
-                {saving ? (
-                  <>
-                    <svg
-                      className="w-4 h-4 animate-spin"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v8z"
-                      />
-                    </svg>
-                    Saving...
-                  </>
-                ) : (
-                  "Save Changes"
-                )}
-              </button>
+          <div className="sticky bottom-24 md:bottom-4 z-20">
+            <div className="bg-white/95 backdrop-blur border border-[#E8E4DC] rounded-2xl shadow-xl px-4 py-4 md:px-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                {/* Message */}
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#C8E650] shrink-0" />
+                  <p className="text-sm text-[#666] font-medium">
+                    You have unsaved changes.
+                  </p>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-3 w-full md:w-auto">
+                  <button
+                    onClick={handleDiscard}
+                    className="flex-1 md:flex-none px-4 py-3 rounded-full border-2 border-[#D0CCC4] bg-white text-sm font-semibold text-[#555] hover:border-[#1A1A1A] hover:text-[#1A1A1A] transition-all duration-200"
+                  >
+                    Discard
+                  </button>
+
+                  <button
+                    onClick={handleSave}
+                    disabled={saving || uploading}
+                    className="flex-1 md:flex-none px-5 py-3 rounded-full bg-[#2D4A1E] text-white text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[160px]"
+                  >
+                    {saving ? (
+                      <>
+                        <svg
+                          className="w-4 h-4 animate-spin shrink-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8z"
+                          />
+                        </svg>
+                        Saving...
+                      </>
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
