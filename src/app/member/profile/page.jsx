@@ -34,12 +34,16 @@ export default function ProfilePage() {
     bio: "",
     avatar: "",
   });
+  const [originalForm, setOriginalForm] = useState(null);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [apiError, setApiError] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState(null);
-  const [originalForm, setOriginalForm] = useState(null);
+
+  // ── Photo state ──
+  const [avatarPreview, setAvatarPreview] = useState(null); // local preview before upload
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
   const fileRef = useRef(null);
 
   // ── Populate form from session ──
@@ -65,7 +69,7 @@ export default function ProfilePage() {
   };
 
   const isDirty = originalForm
-    ? JSON.stringify(form) !== JSON.stringify(originalForm) || avatarPreview
+    ? JSON.stringify(form) !== JSON.stringify(originalForm)
     : false;
 
   const validate = () => {
@@ -77,6 +81,53 @@ export default function ProfilePage() {
     return Object.keys(e).length === 0;
   };
 
+  // ── Handle photo selection → upload to Cloudinary immediately ──
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Show local preview instantly
+    const reader = new FileReader();
+    reader.onload = () => setAvatarPreview(reader.result);
+    reader.readAsDataURL(file);
+
+    // Upload to Cloudinary
+    setUploading(true);
+    setUploadError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setUploadError(data.error || "Upload failed. Please try again.");
+        setAvatarPreview(null);
+        return;
+      }
+
+      // Save the Cloudinary URL into the form — will be saved with profile
+      set("avatar", data.url);
+    } catch (err) {
+      setUploadError("Network error. Please try again.");
+      setAvatarPreview(null);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatarPreview(null);
+    set("avatar", "");
+    if (fileRef.current) fileRef.current.value = "";
+  };
+
+  // ── Save profile ──
   const handleSave = async () => {
     if (!validate()) return;
     setSaving(true);
@@ -96,7 +147,7 @@ export default function ProfilePage() {
         return;
       }
 
-      // Update session so all fields reflect immediately without re-login
+      // Update JWT session so changes reflect immediately everywhere
       await update({
         firstName: form.firstName,
         lastName: form.lastName,
@@ -116,23 +167,14 @@ export default function ProfilePage() {
     }
   };
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setAvatarPreview(reader.result);
-      set("avatar", reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
   const handleDiscard = () => {
     if (originalForm) setForm(originalForm);
     setAvatarPreview(null);
     setErrors({});
     setSaved(false);
     setApiError("");
+    setUploadError("");
+    if (fileRef.current) fileRef.current.value = "";
   };
 
   const initials = user
@@ -142,6 +184,8 @@ export default function ProfilePage() {
   const memberYear = user?.createdAt
     ? new Date(user.createdAt).getFullYear()
     : new Date().getFullYear();
+
+  const displayAvatar = avatarPreview || form.avatar;
 
   return (
     <div className="min-h-screen bg-[#F5F2EC]">
@@ -169,7 +213,7 @@ export default function ProfilePage() {
               </button>
               <button
                 onClick={handleSave}
-                disabled={saving}
+                disabled={saving || uploading}
                 className="px-5 py-2.5 rounded-full bg-[#2D4A1E] text-white text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 disabled:opacity-60 flex items-center gap-2"
               >
                 {saving ? (
@@ -236,16 +280,38 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* ── Avatar ── */}
+        {/* ── Avatar section ── */}
         <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E8E4DC] flex flex-col gap-6">
           <h2 className="text-base font-black text-[#1A1A1A]">Profile Photo</h2>
+
           <div className="flex items-center gap-6">
+            {/* Avatar preview */}
             <div className="relative shrink-0">
               <div className="w-20 h-20 rounded-full bg-[#2D4A1E] flex items-center justify-center text-white text-2xl font-black overflow-hidden border-4 border-[#E8E4DC]">
-                {avatarPreview || form.avatar ? (
+                {uploading ? (
+                  <svg
+                    className="w-6 h-6 animate-spin text-[#C8E650]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8z"
+                    />
+                  </svg>
+                ) : displayAvatar ? (
                   <img
-                    src={avatarPreview || form.avatar}
-                    alt="avatar"
+                    src={displayAvatar}
+                    alt="Profile"
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -256,37 +322,42 @@ export default function ProfilePage() {
                 {user?.membershipType}
               </span>
             </div>
+
             <div className="flex flex-col gap-2">
               <p className="text-sm font-bold text-[#1A1A1A]">
                 {form.firstName} {form.lastName}
               </p>
               <p className="text-xs text-[#888]">Member since {memberYear}</p>
-              <div className="flex gap-2 mt-1">
+
+              <div className="flex gap-2 mt-1 flex-wrap">
                 <button
                   onClick={() => fileRef.current?.click()}
-                  className="text-xs font-semibold bg-[#F5F2EC] border border-[#E0DDD6] text-[#555] px-3 py-1.5 rounded-full hover:border-[#2D4A1E] hover:text-[#2D4A1E] transition-all"
+                  disabled={uploading}
+                  className="text-xs font-semibold bg-[#F5F2EC] border border-[#E0DDD6] text-[#555] px-3 py-1.5 rounded-full hover:border-[#2D4A1E] hover:text-[#2D4A1E] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Upload Photo
+                  {uploading ? "Uploading..." : "Upload Photo"}
                 </button>
-                {avatarPreview && (
+                {displayAvatar && !uploading && (
                   <button
-                    onClick={() => {
-                      setAvatarPreview(null);
-                      set("avatar", originalForm?.avatar ?? "");
-                    }}
+                    onClick={handleRemoveAvatar}
                     className="text-xs font-semibold text-red-400 hover:text-red-600 px-3 py-1.5 rounded-full border border-red-200 hover:border-red-400 transition-all"
                   >
                     Remove
                   </button>
                 )}
               </div>
-              <p className="text-xs text-[#bbb]">JPG or PNG. Max 2MB.</p>
+
+              {uploadError && (
+                <p className="text-red-500 text-xs">{uploadError}</p>
+              )}
+              <p className="text-xs text-[#bbb]">JPG, PNG or WebP. Max 2MB.</p>
             </div>
           </div>
+
           <input
             ref={fileRef}
             type="file"
-            accept="image/png, image/jpeg"
+            accept="image/jpeg, image/png, image/webp"
             className="hidden"
             onChange={handleAvatarChange}
           />
@@ -297,6 +368,7 @@ export default function ProfilePage() {
           <h2 className="text-base font-black text-[#1A1A1A]">
             Personal Information
           </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <InputField label="First Name" error={errors.firstName}>
               <input
@@ -315,6 +387,7 @@ export default function ProfilePage() {
               />
             </InputField>
           </div>
+
           <InputField
             label="Email Address"
             hint="Contact support to change email"
@@ -325,6 +398,7 @@ export default function ProfilePage() {
               disabled
             />
           </InputField>
+
           <InputField label="Phone Number" error={errors.phone}>
             <input
               className={inputClass}
@@ -334,6 +408,7 @@ export default function ProfilePage() {
               onChange={(e) => set("phone", e.target.value)}
             />
           </InputField>
+
           <InputField label="Bio" hint="Optional">
             <textarea
               className={`${inputClass} resize-none`}
@@ -379,27 +454,23 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        {/* Sticky bottom save bar */}
+        {/* ── Sticky bottom save bar ── */}
         {isDirty && (
-          <div className="sticky bottom-24 md:bottom-4 bg-white border border-[#E8E4DC] rounded-2xl px-4 md:px-6 py-3 md:py-4 shadow-lg flex items-center justify-between gap-3 md:gap-4">
-            {/* Message */}
-            <p className="text-xs md:text-sm text-[#888] font-medium">
-              Unsaved changes
+          <div className="sticky bottom-20 md:bottom-4 bg-white border border-[#E8E4DC] rounded-2xl px-6 py-4 shadow-lg flex items-center justify-between gap-4">
+            <p className="text-sm text-[#888] font-medium">
+              You have unsaved changes.
             </p>
-
-            {/* Buttons */}
-            <div className="flex items-center gap-2 md:gap-3">
+            <div className="flex gap-3">
               <button
                 onClick={handleDiscard}
-                className="px-4 py-2 md:py-2.5 rounded-full border border-[#D0CCC4] text-xs md:text-sm font-semibold text-[#555] hover:border-[#1A1A1A] transition-all"
+                className="px-5 py-2.5 rounded-full border-2 border-[#D0CCC4] text-sm font-semibold text-[#555] hover:border-[#1A1A1A] transition-all"
               >
                 Discard
               </button>
-
               <button
                 onClick={handleSave}
-                disabled={saving}
-                className="px-4 py-2 md:py-2.5 rounded-full bg-[#2D4A1E] text-white text-xs md:text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 disabled:opacity-60 flex items-center gap-2"
+                disabled={saving || uploading}
+                className="px-5 py-2.5 rounded-full bg-[#2D4A1E] text-white text-sm font-bold hover:bg-[#C8E650] hover:text-[#1A1A1A] transition-all duration-300 disabled:opacity-60 flex items-center gap-2"
               >
                 {saving ? (
                   <>
@@ -422,10 +493,10 @@ export default function ProfilePage() {
                         d="M4 12a8 8 0 018-8v8z"
                       />
                     </svg>
-                    Saving
+                    Saving...
                   </>
                 ) : (
-                  "Save"
+                  "Save Changes"
                 )}
               </button>
             </div>
