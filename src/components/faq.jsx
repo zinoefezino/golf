@@ -77,22 +77,24 @@ function FAQItem({ q, a, index }) {
 export default function FAQSection() {
   return (
     <section className="bg-[#F5F2EC] px-4 md:px-16 py-14 md:py-20">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-[#1A1A1A] text-4xl md:text-6xl tracking-tight font-black leading-tight  mb-3">
-          Frequently Asked Questions
-        </h1>
-        <p className="text-[#888] text-sm md:text-base max-w-sm mx-auto leading-relaxed">
-          If there are questions you want to ask, we will answer all your
-          questions.
-        </p>
-      </div>
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-[#1A1A1A] text-4xl md:text-6xl tracking-tight font-black leading-tight mb-3">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-[#888] text-sm md:text-base max-w-sm mx-auto leading-relaxed">
+            If there are questions you want to ask, we will answer all your
+            questions.
+          </p>
+        </div>
 
-      {/* 2-col grid on desktop, single col on mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16">
-        {FAQS.map((faq, i) => (
-          <FAQItem key={i} index={i} q={faq.q} a={faq.a} />
-        ))}
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16">
+          {FAQS.map((faq, i) => (
+            <FAQItem key={i} index={i} q={faq.q} a={faq.a} />
+          ))}
+        </div>
       </div>
     </section>
   );
