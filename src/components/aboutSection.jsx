@@ -104,7 +104,7 @@ export default function AboutSection() {
   return (
     <section
       ref={sectionRef}
-      className="overflow-hidden bg-[#F5F2EC] px-4 py-16 md:px-8 md:py-24"
+      className="overflow-hidden  px-4 py-16 md:px-8 md:py-24"
     >
       <div className="mx-auto max-w-7xl">
         <div
@@ -142,7 +142,7 @@ export default function AboutSection() {
         >
           <div
             data-feature-image
-            className="relative h-90 overflow-hidden rounded-4xl border border-[#2D4A1E]/10 bg-[#E8E4DC] shadow-[0_24px_70px_rgba(45,74,30,0.12)] md:h-140"
+            className="relative h-90 overflow-hidden rounded-4xl border border-[#2D4A1E]/10 bg-[#E8E4DC] md:h-140"
           >
             <Image
               src="/img1.avif"
@@ -202,7 +202,7 @@ export default function AboutSection() {
         <div ref={statsRef} className="grid gap-4 md:grid-cols-3">
           <div
             data-stat-card
-            className="rounded-[1.75rem] border border-[#2D4A1E]/10 bg-white p-6 shadow-[0_18px_55px_rgba(45,74,30,0.06)]"
+            className="rounded-[1.75rem] border border-[#2D4A1E]/10 bg-white p-6 "
           >
             <p className="text-4xl font-black leading-none text-[#172112]">
               18
@@ -212,10 +212,7 @@ export default function AboutSection() {
             </p>
           </div>
 
-          <div
-            data-stat-card
-            className="rounded-[1.75rem] bg-[#C8E650] p-6 shadow-[0_18px_55px_rgba(200,230,80,0.18)]"
-          >
+          <div data-stat-card className="rounded-[1.75rem] bg-[#C8E650] p-6 ">
             <p className="text-4xl font-black leading-none text-[#172112]">
               365
             </p>
@@ -226,7 +223,7 @@ export default function AboutSection() {
 
           <div
             data-stat-card
-            className="rounded-[1.75rem] border border-[#2D4A1E]/10 bg-white p-6 shadow-[0_18px_55px_rgba(45,74,30,0.06)]"
+            className="rounded-[1.75rem] border border-[#2D4A1E]/10 bg-white p-6 "
           >
             <div className="flex items-center gap-1 text-[#C8E650]">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -245,7 +242,7 @@ export default function AboutSection() {
 
         <div
           ref={ctaRef}
-          className="mt-14 grid overflow-hidden rounded-4xl bg-[#172112] shadow-[0_28px_90px_rgba(23,33,18,0.24)] md:grid-cols-[1fr_0.9fr]"
+          className="mt-14 grid overflow-hidden rounded-4xl bg-[#172112]  md:grid-cols-[1fr_0.9fr]"
         >
           <div className="flex flex-col justify-between gap-10 p-7 md:p-10">
             <div>

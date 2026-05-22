@@ -130,10 +130,7 @@ export default function FAQSection() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="bg-[#F5F2EC] px-4 py-14 md:px-16 md:py-20"
-    >
+    <section ref={sectionRef} className="px-4 py-14 md:px-16 md:py-20">
       <div className="mx-auto max-w-5xl">
         <div ref={headerRef} className="mb-12 text-center">
           <h1 className="mb-3 text-4xl font-black leading-tight tracking-tight text-[#1A1A1A] md:text-6xl">
