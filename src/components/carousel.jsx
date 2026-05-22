@@ -99,22 +99,20 @@ export default function MainWebsiteCarousel() {
 
     return () => ctx.revert();
   }, []);
-
   useEffect(() => {
     if (prefersReducedMotion) return;
 
     const track = trackRef.current;
-
     if (!track) return;
+
+    let progress = 0;
 
     const getWrapWidth = () => {
       const baseCount = BASE_IMAGES.length;
-
       let width = 0;
 
       for (let i = 0; i < baseCount; i++) {
         const el = track.children[i];
-
         if (!el) break;
 
         const style = window.getComputedStyle(el);
@@ -131,29 +129,39 @@ export default function MainWebsiteCarousel() {
       tweenRef.current?.kill();
 
       const wrapWidth = getWrapWidth();
-
       if (!wrapWidth) return;
 
-      gsap.set(track, {
-        x: 0,
-      });
+      // 🔥 capture current position BEFORE reset
+      const currentX = gsap.getProperty(track, "x") || 0;
+      progress = Math.abs(currentX % wrapWidth) / wrapWidth;
+
+      const startX = -wrapWidth * progress;
+
+      gsap.set(track, { x: startX });
 
       tweenRef.current = gsap.to(track, {
-        x: `-=${wrapWidth}`,
+        x: startX - wrapWidth,
         duration: wrapWidth / speedPxPerSecond,
         ease: "none",
         repeat: -1,
+        modifiers: {
+          x: gsap.utils.unitize((x) => {
+            const value = parseFloat(x);
+            return ((value % -wrapWidth) + -wrapWidth) % -wrapWidth;
+          }),
+        },
       });
     };
 
     createCarousel();
 
-    window.addEventListener("resize", createCarousel);
+    const onResize = () => createCarousel();
+
+    window.addEventListener("resize", onResize);
 
     return () => {
       tweenRef.current?.kill();
-
-      window.removeEventListener("resize", createCarousel);
+      window.removeEventListener("resize", onResize);
     };
   }, [prefersReducedMotion]);
 
