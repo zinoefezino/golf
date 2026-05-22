@@ -131,11 +131,11 @@ export default function StorySection() {
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-18">
         <div
           ref={mediaRef}
-          className="order-2 grid gap-3 sm:grid-cols-2 lg:order-1 lg:h-[560px] lg:grid-cols-6 lg:grid-rows-6"
+          className="order-2 grid gap-3 sm:grid-cols-2 lg:order-1 lg:h-140 lg:grid-cols-6 lg:grid-rows-6"
         >
           <div
             data-story-image
-            className="relative h-72 overflow-hidden rounded-[2rem] bg-[#E8E4DC] shadow-[0_24px_70px_rgba(45,74,30,0.12)] sm:col-span-2 lg:col-span-6 lg:row-span-3 lg:h-full"
+            className="relative h-72 overflow-hidden rounded-4xl bg-[#E8E4DC] shadow-[0_24px_70px_rgba(45,74,30,0.12)] sm:col-span-2 lg:col-span-6 lg:row-span-3 lg:h-full"
           >
             <Image
               src={data.img1.src}
@@ -149,7 +149,7 @@ export default function StorySection() {
 
           <div
             data-story-image
-            className="relative h-56 overflow-hidden rounded-[1.5rem] bg-[#E8E4DC] shadow-[0_18px_50px_rgba(45,74,30,0.09)] lg:col-span-3 lg:row-span-3 lg:h-full"
+            className="relative h-56 overflow-hidden rounded-3xl bg-[#E8E4DC] shadow-[0_18px_50px_rgba(45,74,30,0.09)] lg:col-span-3 lg:row-span-3 lg:h-full"
           >
             <Image
               src={data.img2.src}
@@ -162,7 +162,7 @@ export default function StorySection() {
 
           <div
             data-story-image
-            className="relative h-56 overflow-hidden rounded-[1.5rem] bg-[#E8E4DC] shadow-[0_18px_50px_rgba(45,74,30,0.09)] lg:col-span-3 lg:row-span-3 lg:h-full"
+            className="relative h-56 overflow-hidden rounded-3xl bg-[#E8E4DC] shadow-[0_18px_50px_rgba(45,74,30,0.09)] lg:col-span-3 lg:row-span-3 lg:h-full"
           >
             <Image
               src={data.img3.src}
