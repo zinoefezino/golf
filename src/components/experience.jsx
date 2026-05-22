@@ -52,6 +52,7 @@ function Card({ card, priority = false }) {
           quality={90}
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
+          onLoad={() => ScrollTrigger.refresh()}
         />
       </div>
 
@@ -69,48 +70,69 @@ function Card({ card, priority = false }) {
 export default function ClubExperienceSection() {
   const sectionRef = useRef(null);
   const introRef = useRef(null);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const ctx = gsap.context(() => {
-      gsap.from(introRef.current, {
-        y: 30,
-        opacity: 0,
-        duration: 0.85,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 78%",
-          once: true,
-        },
-      });
+    const ctx = gsap.context((self) => {
+      const cards = self.selector("[data-experience-card]");
+      const images = self.selector("[data-experience-image]");
 
-      gsap.from("[data-experience-card]", {
-        y: 52,
-        opacity: 0,
-        scale: 0.97,
-        duration: 0.9,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: "[data-experience-grid]",
-          start: "top 78%",
-          once: true,
+      gsap.fromTo(
+        introRef.current,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.85,
+          ease: "power3.out",
+          immediateRender: false,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 85%",
+            once: true,
+          },
         },
-      });
+      );
 
-      gsap.from("[data-experience-image]", {
-        scale: 1.12,
-        duration: 1.25,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: "[data-experience-grid]",
-          start: "top 78%",
-          once: true,
+      gsap.fromTo(
+        cards,
+        { y: 52, opacity: 0, scale: 0.97 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.1,
+          immediateRender: false,
+          scrollTrigger: {
+            trigger: gridRef.current,
+            start: "top 90%",
+            once: true,
+          },
         },
-      });
+      );
+
+      gsap.fromTo(
+        images,
+        { scale: 1.12 },
+        {
+          scale: 1,
+          duration: 1.25,
+          ease: "power3.out",
+          stagger: 0.1,
+          immediateRender: false,
+          scrollTrigger: {
+            trigger: gridRef.current,
+            start: "top 90%",
+            once: true,
+          },
+        },
+      );
+
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     }, sectionRef);
 
     return () => ctx.revert();
@@ -138,6 +160,7 @@ export default function ClubExperienceSection() {
         </div>
 
         <div
+          ref={gridRef}
           data-experience-grid
           className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6"
         >

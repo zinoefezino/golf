@@ -61,6 +61,7 @@ export default function MainWebsiteCarousel() {
   const headingRef = useRef(null);
   const trackRef = useRef(null);
   const tweenRef = useRef(null);
+  const wrapWidthRef = useRef(0);
 
   const speedPxPerSecond = 42;
 
@@ -83,20 +84,6 @@ export default function MainWebsiteCarousel() {
           once: true,
         },
       });
-
-      gsap.from("[data-carousel-card]", {
-        y: 46,
-        scale: 0.96,
-        opacity: 0,
-        duration: 0.9,
-        ease: "power3.out",
-        stagger: 0.08,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          once: true,
-        },
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -108,33 +95,52 @@ export default function MainWebsiteCarousel() {
     const track = trackRef.current;
     if (!track) return;
 
-    const createCarousel = () => {
-      tweenRef.current?.kill();
-
+    const getWrapWidth = () => {
       const baseCount = BASE_IMAGES.length;
-      let wrapWidth = 0;
+      let width = 0;
 
       for (let i = 0; i < baseCount; i++) {
         const el = track.children[i];
         if (!el) break;
 
         const style = window.getComputedStyle(el);
-        wrapWidth += el.getBoundingClientRect().width;
-        wrapWidth += parseFloat(style.marginLeft || "0");
-        wrapWidth += parseFloat(style.marginRight || "0");
+        width += el.getBoundingClientRect().width;
+        width += parseFloat(style.marginLeft || "0");
+        width += parseFloat(style.marginRight || "0");
       }
 
+      return width;
+    };
+
+    const createCarousel = () => {
+      const oldWrapWidth = wrapWidthRef.current || 1;
+      const oldX = gsap.getProperty(track, "x") || 0;
+      const oldProgress =
+        oldWrapWidth > 0
+          ? Math.abs(Number(oldX) % oldWrapWidth) / oldWrapWidth
+          : 0;
+
+      tweenRef.current?.kill();
+
+      const wrapWidth = getWrapWidth();
       if (!wrapWidth) return;
 
-      gsap.set(track, { x: 0 });
+      wrapWidthRef.current = wrapWidth;
+
+      const startX = -wrapWidth * oldProgress;
+
+      gsap.set(track, { x: startX });
 
       tweenRef.current = gsap.to(track, {
-        x: -wrapWidth,
+        x: startX - wrapWidth,
         duration: wrapWidth / speedPxPerSecond,
         ease: "none",
         repeat: -1,
         modifiers: {
-          x: gsap.utils.unitize((x) => parseFloat(x) % -wrapWidth),
+          x: gsap.utils.unitize((x) => {
+            const value = parseFloat(x);
+            return ((value % -wrapWidth) + -wrapWidth) % -wrapWidth;
+          }),
         },
       });
     };
@@ -158,16 +164,21 @@ export default function MainWebsiteCarousel() {
       >
         <div className="mx-auto max-w-7xl">
           <div ref={headingRef} className="mb-7">
-            <h1 className="mt-3 text-4xl font-black tracking-tight text-[#172112] md:text-6xl">
+            <h1 className="mt-3 text-center text-4xl font-black tracking-tight text-[#172112] md:text-6xl">
               A Better Day on the Course
             </h1>
+
+            <p className="mx-auto mt-5 max-w-lg text-center text-sm leading-relaxed text-[#777] md:text-base">
+              From the moment you step onto the grounds, our course offers a
+              blend of natural beauty and thoughtful design that elevates every
+              round.
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
             {BASE_IMAGES.map((img, index) => (
               <div
                 key={`${img.src}-${index}`}
-                data-carousel-card
                 className={`relative overflow-hidden rounded-2xl border border-[#2D4A1E]/10 bg-[#E8E4DC] ${img.heightClass}`}
               >
                 <Image
@@ -193,11 +204,11 @@ export default function MainWebsiteCarousel() {
     >
       <div className="mx-auto max-w-7xl">
         <div ref={headingRef} className="mb-7">
-          <h1 className="mt-3 text-4xl font-black tracking-tight text-[#172112] md:text-6xl text-center">
+          <h1 className="mt-3 text-center text-4xl font-black tracking-tight text-[#172112] md:text-6xl">
             A Better Day on the Course
           </h1>
 
-          <p className="mx-auto max-w-lg text-sm leading-relaxed text-[#777] md:text-base mt-5 text-center">
+          <p className="mx-auto mt-5 max-w-lg text-center text-sm leading-relaxed text-[#777] md:text-base">
             From the moment you step onto the grounds, our course offers a blend
             of natural beauty and thoughtful design that elevates every round.
           </p>
@@ -214,7 +225,6 @@ export default function MainWebsiteCarousel() {
               return (
                 <figure
                   key={`${img.src}-${index}`}
-                  data-carousel-card
                   className={`relative mx-2 w-60 shrink-0 overflow-hidden rounded-2xl border border-[#2D4A1E]/10 bg-[#E8E4DC] sm:mx-3 sm:w-75 ${BASE_IMAGES[baseIndex].heightClass}`}
                 >
                   <Image
