@@ -89,7 +89,8 @@ export default function LoginPage() {
       const res = await signIn("credentials", {
         email: form.email,
         password: form.password,
-        redirect: false, // handle redirect manually
+        remember: String(form.remember), // pass as string — credentials are always strings
+        redirect: false,
       });
 
       if (res?.error) {
@@ -97,9 +98,8 @@ export default function LoginPage() {
         return;
       }
 
-      // Success — go to member dashboard
       router.push("/member/dashboard");
-      router.refresh(); // refresh server components to pick up new session
+      router.refresh();
     } catch (err) {
       setAuthError("Something went wrong. Please try again.");
     } finally {
@@ -112,7 +112,7 @@ export default function LoginPage() {
       {/* ── LEFT: Photo panel ── */}
       <div className="hidden md:flex md:w-[45%] relative shrink-0">
         <Image
-          src="/hero4.webp"
+          src="/img13.avif"
           alt="Golf course fairway"
           fill
           priority
@@ -154,10 +154,9 @@ export default function LoginPage() {
             your member benefits.
           </p>
 
-          {/* Testimonial */}
           <div className="mt-8 bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-5">
             <p className="text-white/80 text-sm leading-relaxed italic">
-              "Pine Ridge is the best club I've ever played at. The course is
+              "Golf is the best club I've ever played at. The course is
               immaculate and the staff are world-class."
             </p>
             <div className="flex items-center gap-3 mt-4">
@@ -184,9 +183,12 @@ export default function LoginPage() {
               <path d="M16 2 A14 14 0 0 0 16 30 Z" fill="#4A7C2F" />
               <path d="M16 2 A14 14 0 0 1 16 30 Z" fill="#C8E650" />
             </svg>
-            <span className="text-lg font-bold text-[#1A1A1A]">Golf</span>
+            <span className="text-lg font-bold text-[#1A1A1A]">Golfngv</span>
           </Link>
-          <Link href="/signup" className="text-sm font-semibold text-[#2D4A1E]">
+          <Link
+            href="/sign-up"
+            className="text-sm font-semibold text-[#2D4A1E]"
+          >
             Sign up
           </Link>
         </div>
@@ -202,7 +204,7 @@ export default function LoginPage() {
             <p className="text-[#888] text-sm">
               No account?{" "}
               <Link
-                href="/signup"
+                href="/sign-up"
                 className="text-[#2D4A1E] font-semibold hover:underline"
               >
                 Sign up free
@@ -269,8 +271,8 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* Remember me */}
-            <label className="flex items-center gap-3 cursor-pointer group">
+            {/* ── Remember me ── */}
+            <label className="flex items-center gap-3 cursor-pointer group select-none">
               <div
                 onClick={() => set("remember", !form.remember)}
                 className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all duration-200 ${
@@ -291,7 +293,16 @@ export default function LoginPage() {
                   </svg>
                 )}
               </div>
-              <span className="text-sm text-[#555]">Remember me</span>
+              <div>
+                <span className="text-sm text-[#555] font-medium">
+                  Remember me
+                </span>
+                <p className="text-xs text-[#aaa] mt-0.5">
+                  {form.remember
+                    ? "Stays logged in for 30 days"
+                    : "Logs out when browser closes"}
+                </p>
+              </div>
             </label>
 
             {/* Submit */}
@@ -346,7 +357,7 @@ export default function LoginPage() {
           <p className="text-center text-xs text-[#aaa] mt-6">
             Don't have an account?{" "}
             <Link
-              href="/signup"
+              href="/sign-up"
               className="text-[#2D4A1E] font-semibold hover:underline"
             >
               Sign up free

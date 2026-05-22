@@ -4,6 +4,9 @@ import bcrypt from "bcryptjs";
 import connectDB from "./db";
 import User from "@/models/User";
 
+const REMEMBER_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
+const NO_REMEMBER_MAX_AGE = 60 * 60; // 1 hour (effectively session-only)
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
@@ -11,6 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        remember: { label: "Remember Me", type: "text" },
       },
 
       async authorize(credentials) {
@@ -20,7 +24,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         await connectDB();
 
-        // Find user — explicitly include password (select: false by default)
         const user = await User.findOne({
           email: credentials.email.toLowerCase(),
         }).select("+password");
@@ -38,7 +41,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error("Invalid password");
         }
 
-        // Return the object that gets stored in the session token
         return {
           id: user._id.toString(),
           email: user.email,
@@ -49,14 +51,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           membershipType: user.membershipType,
           avatar: user.avatar,
           createdAt: user.createdAt?.toISOString(),
+          // Pass remember flag through so jwt callback can set maxAge
+          remember: credentials.remember === "true",
         };
       },
     }),
   ],
 
   callbacks: {
-    // ── Add extra fields to the JWT token ──
     async jwt({ token, user, trigger, session }) {
+      // ── On first sign in ──
       if (user) {
         token.id = user.id;
         token.firstName = user.firstName;
@@ -66,8 +70,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.membershipType = user.membershipType;
         token.avatar = user.avatar;
         token.createdAt = user.createdAt;
+        token.remember = user.remember;
+
+        // Set expiry based on remember me
+        token.maxAge = user.remember ? REMEMBER_MAX_AGE : NO_REMEMBER_MAX_AGE;
       }
-      // ── Handle session update() calls from the client ──
+
+      // ── Handle profile update() calls from the client ──
       if (trigger === "update" && session) {
         if (session.firstName) token.firstName = session.firstName;
         if (session.lastName) token.lastName = session.lastName;
@@ -75,10 +84,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (session.bio !== undefined) token.bio = session.bio;
         if (session.avatar !== undefined) token.avatar = session.avatar;
       }
+
       return token;
     },
 
-    // ── Expose token fields on the session object ──
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id;
@@ -89,6 +98,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.membershipType = token.membershipType;
         session.user.avatar = token.avatar;
         session.user.createdAt = token.createdAt;
+        session.user.remember = token.remember;
       }
       return session;
     },
@@ -96,11 +106,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   pages: {
     signIn: "/login",
-    error: "/login", // auth errors redirect here
+    error: "/login",
   },
 
   session: {
     strategy: "jwt",
+    maxAge: REMEMBER_MAX_AGE, // default — overridden per-token above
   },
 
   secret: process.env.NEXTAUTH_SECRET,
