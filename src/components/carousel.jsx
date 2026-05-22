@@ -174,12 +174,12 @@ export default function MainWebsiteCarousel() {
         <div className="mx-auto max-w-7xl">
           <div ref={headingRef} className="mb-8 text-center">
             <h1 className="text-4xl font-black tracking-tight text-[#172112] md:text-6xl">
-              A Better Day on the Course
+              Gallery
             </h1>
 
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-[#777] md:text-base">
-              Scenic fairways, refined greens, and a course designed to elevate
-              every round from the first tee to the final putt.
+              A curated collection of our most stunning shots, showcasing the
+              beauty and spirit of our golf course.
             </p>
           </div>
 
@@ -206,19 +206,16 @@ export default function MainWebsiteCarousel() {
   }
 
   return (
-    <section
-      ref={sectionRef}
-      className="overflow-hidden px-5 py-14 sm:px-8 sm:py-18"
-    >
+    <section ref={sectionRef} className="overflow-hidden ">
       <div className="mx-auto max-w-7xl">
         <div ref={headingRef} className="mb-8 text-center">
           <h1 className="text-4xl font-black tracking-tight text-[#172112] md:text-6xl">
-            A Better Day on the Course
+            Gallery
           </h1>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-[#777] md:text-base">
-            Scenic fairways, refined greens, and a course designed to elevate
-            every round from the first tee to the final putt.
+            A curated collection of our most stunning shots, showcasing the
+            beauty and spirit of our golf course.
           </p>
         </div>
 
