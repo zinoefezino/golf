@@ -191,13 +191,13 @@ export default function DashboardPage() {
               Welcome back
             </p>
 
-            <h1 className="text-white text-2xl md:text-4xl font-black leading-tight tracking-tight">
+            <h2 className="text-white text-2xl md:text-4xl font-black leading-tight tracking-tight">
               {user ? (
                 `${user.firstName} ${user.lastName}`
               ) : (
                 <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
               )}
-            </h1>
+            </h2>
 
             <div className="mt-3">
               <span className="inline-flex bg-[#C8E650] text-[#1A1A1A] text-xs font-bold px-3 py-1 rounded-full capitalize">
