@@ -13,7 +13,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-svh overflow-hidden lg:h-screen lg:min-h-160">
       <Image
-        src="/img3.avif"
+        src="/hero7.webp"
         alt="Golfer on lush fairway"
         fill
         quality={90}
