@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const FAQS = [
   {
@@ -29,23 +31,42 @@ const FAQS = [
   },
 ];
 
-function FAQItem({ q, a, index }) {
+function FAQItem({ q, a }) {
   const [open, setOpen] = useState(false);
+  const answerRef = useRef(null);
+  const iconRef = useRef(null);
+
+  useEffect(() => {
+    if (!answerRef.current) return;
+
+    gsap.to(answerRef.current, {
+      height: open ? "auto" : 0,
+      opacity: open ? 1 : 0,
+      duration: 0.32,
+      ease: "power2.out",
+    });
+
+    gsap.to(iconRef.current, {
+      rotate: open ? 45 : 0,
+      duration: 0.28,
+      ease: "power2.out",
+    });
+  }, [open]);
 
   return (
-    <div className="border-b border-[#E8E4DC] last:border-b-0">
+    <div data-faq-item className="border-b border-[#E8E4DC] last:border-b-0">
       <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-4 py-5 text-left group"
+        onClick={() => setOpen((current) => !current)}
+        className="group flex w-full items-center gap-4 py-5 text-left"
       >
-        {/* Square icon */}
         <span
-          className={`shrink-0 w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 ${
+          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors duration-200 ${
             open ? "bg-[#2D4A1E]" : "bg-[#C8E650]"
           }`}
         >
           <svg
-            className={`w-3.5 h-3.5 transition-transform duration-300 ${open ? "rotate-45" : ""}`}
+            ref={iconRef}
+            className="h-3.5 w-3.5"
             fill="none"
             stroke={open ? "#C8E650" : "#1A1A1A"}
             strokeWidth="2.5"
@@ -56,43 +77,81 @@ function FAQItem({ q, a, index }) {
         </span>
 
         <span
-          className={`flex-1 text-sm md:text-base font-semibold leading-snug transition-colors duration-200 ${open ? "text-[#2D4A1E]" : "text-[#1A1A1A]"}`}
+          className={`flex-1 text-sm font-semibold leading-snug transition-colors duration-200 md:text-base ${
+            open ? "text-[#2D4A1E]" : "text-[#1A1A1A]"
+          }`}
         >
           {q}
         </span>
       </button>
 
-      {/* Answer */}
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          open ? "max-h-40 opacity-100 pb-5" : "max-h-0 opacity-0"
-        }`}
-      >
-        <p className="text-[#666] text-sm leading-relaxed pl-11">{a}</p>
+      <div ref={answerRef} className="h-0 overflow-hidden opacity-0">
+        <p className="pb-5 pl-11 text-sm leading-relaxed text-[#666]">{a}</p>
       </div>
     </div>
   );
 }
 
 export default function FAQSection() {
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      gsap.from(headerRef.current, {
+        y: 30,
+        opacity: 0,
+        duration: 0.85,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 78%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-faq-item]", {
+        y: 24,
+        opacity: 0,
+        duration: 0.65,
+        ease: "power3.out",
+        stagger: 0.06,
+        scrollTrigger: {
+          trigger: "[data-faq-grid]",
+          start: "top 82%",
+          once: true,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="bg-[#F5F2EC] px-4 md:px-16 py-14 md:py-20">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-[#1A1A1A] text-4xl md:text-6xl tracking-tight font-black leading-tight mb-3">
+    <section
+      ref={sectionRef}
+      className="bg-[#F5F2EC] px-4 py-14 md:px-16 md:py-20"
+    >
+      <div className="mx-auto max-w-5xl">
+        <div ref={headerRef} className="mb-12 text-center">
+          <h1 className="mb-3 text-4xl font-black leading-tight tracking-tight text-[#1A1A1A] md:text-6xl">
             Frequently Asked Questions
           </h1>
-          <p className="text-[#888] text-sm md:text-base max-w-sm mx-auto leading-relaxed">
-            If there are questions you want to ask, we will answer all your
-            questions.
+
+          <p className="mx-auto max-w-sm text-sm leading-relaxed text-[#888] md:text-base">
+            Find quick answers about bookings, memberships, course policies, and
+            club services.
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16">
-          {FAQS.map((faq, i) => (
-            <FAQItem key={i} index={i} q={faq.q} a={faq.a} />
+        <div
+          data-faq-grid
+          className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16"
+        >
+          {FAQS.map((faq) => (
+            <FAQItem key={faq.q} q={faq.q} a={faq.a} />
           ))}
         </div>
       </div>

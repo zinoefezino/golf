@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -55,9 +57,10 @@ const BASE_IMAGES = [
 
 export default function MainWebsiteCarousel() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
   const trackRef = useRef(null);
-  const rafRef = useRef(null);
-  const lastTsRef = useRef(0);
+  const tweenRef = useRef(null);
 
   const speedPxPerSecond = 42;
 
@@ -66,70 +69,96 @@ export default function MainWebsiteCarousel() {
   }, []);
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      gsap.from(headingRef.current, {
+        y: 28,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 78%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-carousel-card]", {
+        y: 46,
+        scale: 0.96,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        stagger: 0.08,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
+          once: true,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
     if (prefersReducedMotion) return;
 
     const track = trackRef.current;
     if (!track) return;
 
-    const setupWrap = () => {
+    const createCarousel = () => {
+      tweenRef.current?.kill();
+
       const baseCount = BASE_IMAGES.length;
-      let total = 0;
+      let wrapWidth = 0;
 
       for (let i = 0; i < baseCount; i++) {
         const el = track.children[i];
         if (!el) break;
 
         const style = window.getComputedStyle(el);
-        total += el.getBoundingClientRect().width;
-        total += parseFloat(style.marginRight || "0");
-        total += parseFloat(style.marginLeft || "0");
+        wrapWidth += el.getBoundingClientRect().width;
+        wrapWidth += parseFloat(style.marginLeft || "0");
+        wrapWidth += parseFloat(style.marginRight || "0");
       }
 
-      track.__carousel = {
-        x: 0,
-        wrapAt: -Math.abs(total || track.scrollWidth / 3),
-      };
+      if (!wrapWidth) return;
+
+      gsap.set(track, { x: 0 });
+
+      tweenRef.current = gsap.to(track, {
+        x: -wrapWidth,
+        duration: wrapWidth / speedPxPerSecond,
+        ease: "none",
+        repeat: -1,
+        modifiers: {
+          x: gsap.utils.unitize((x) => parseFloat(x) % -wrapWidth),
+        },
+      });
     };
 
-    const animate = (ts) => {
-      if (!lastTsRef.current) lastTsRef.current = ts;
+    const handleResize = () => createCarousel();
 
-      const dt = (ts - lastTsRef.current) / 1000;
-      lastTsRef.current = ts;
-
-      const state = track.__carousel || {
-        x: 0,
-        wrapAt: -track.scrollWidth / 3,
-      };
-      state.x = (state.x - speedPxPerSecond * dt) % state.wrapAt;
-      track.__carousel = state;
-
-      track.style.transform = `translate3d(${state.x}px, 0, 0)`;
-      rafRef.current = requestAnimationFrame(animate);
-    };
-
-    setupWrap();
-
-    const onResize = () => {
-      lastTsRef.current = 0;
-      setupWrap();
-    };
-
-    window.addEventListener("resize", onResize);
-    rafRef.current = requestAnimationFrame(animate);
+    createCarousel();
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("resize", onResize);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", handleResize);
+      tweenRef.current?.kill();
     };
   }, [prefersReducedMotion]);
 
   if (prefersReducedMotion) {
     return (
-      <section className="overflow-hidden px-5 py-12 sm:px-8 sm:py-16">
+      <section
+        ref={sectionRef}
+        className="overflow-hidden px-5 py-12 sm:px-8 sm:py-16"
+      >
         <div className="mx-auto max-w-7xl">
-          <div className="mb-7">
-            <h1 className="mt-3 text-4xl md:text-6xl font-black tracking-tight text-[#172112] ">
+          <div ref={headingRef} className="mb-7">
+            <h1 className="mt-3 text-4xl font-black tracking-tight text-[#172112] md:text-6xl">
               A Better Day on the Course
             </h1>
           </div>
@@ -138,11 +167,13 @@ export default function MainWebsiteCarousel() {
             {BASE_IMAGES.map((img, index) => (
               <div
                 key={`${img.src}-${index}`}
+                data-carousel-card
                 className={`relative overflow-hidden rounded-2xl border border-[#2D4A1E]/10 bg-[#E8E4DC] ${img.heightClass}`}
               >
                 <Image
                   src={img.src}
                   alt={img.alt}
+                  quality={90}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                   className="object-cover"
@@ -156,19 +187,26 @@ export default function MainWebsiteCarousel() {
   }
 
   return (
-    <section className="overflow-hidden px-5 py-12 sm:px-8 sm:py-16">
+    <section
+      ref={sectionRef}
+      className="overflow-hidden px-5 py-12 sm:px-8 sm:py-16"
+    >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-7">
-          <h1 className="mt-3 text-4xl md:text-6xl font-black tracking-tight text-[#172112] ">
+        <div ref={headingRef} className="mb-7">
+          <h1 className="mt-3 text-4xl font-black tracking-tight text-[#172112] md:text-6xl text-center">
             A Better Day on the Course
           </h1>
+
+          <p className="mx-auto max-w-lg text-sm leading-relaxed text-[#777] md:text-base mt-5 text-center">
+            From the moment you step onto the grounds, our course offers a blend
+            of natural beauty and thoughtful design that elevates every round.
+          </p>
         </div>
 
-        <div className="overflow-hidden">
+        <div className="overflow-hidden touch-pan-y select-none">
           <div
             ref={trackRef}
-            className="flex will-change-transform"
-            style={{ transform: "translate3d(0, 0, 0)" }}
+            className="flex pointer-events-none will-change-transform"
           >
             {slides.map((img, index) => {
               const baseIndex = index % BASE_IMAGES.length;
@@ -176,15 +214,18 @@ export default function MainWebsiteCarousel() {
               return (
                 <figure
                   key={`${img.src}-${index}`}
-                  className={`relative mx-2 shrink-0 overflow-hidden rounded-2xl border border-[#2D4A1E]/10 bg-[#E8E4DC] sm:mx-3 ${BASE_IMAGES[baseIndex].heightClass} w-52.5 sm:w-65`}
+                  data-carousel-card
+                  className={`relative mx-2 w-60 shrink-0 overflow-hidden rounded-2xl border border-[#2D4A1E]/10 bg-[#E8E4DC] sm:mx-3 sm:w-75 ${BASE_IMAGES[baseIndex].heightClass}`}
                 >
                   <Image
                     src={img.src}
                     alt={img.alt}
                     fill
-                    sizes="(max-width: 640px) 65vw, (max-width: 1024px) 35vw, 260px"
+                    sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 360px"
                     className="object-cover"
-                    priority={index < 2}
+                    priority={index < 3}
+                    quality={90}
+                    draggable={false}
                   />
                 </figure>
               );

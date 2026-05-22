@@ -16,7 +16,7 @@ export default function Hero() {
         src="/img3.avif"
         alt="Golfer on lush fairway"
         fill
-        quality={85}
+        quality={90}
         priority
         sizes="(max-width: 768px) 140vw, 100vw"
         className="object-cover object-center"
@@ -46,7 +46,7 @@ export default function Hero() {
                 href="/booking"
                 className="group flex items-center gap-3 rounded-full bg-[#1A1A1A]/80 py-1 pl-5 pr-1 text-sm font-bold tracking-wide text-white shadow-lg shadow-black/20 transition-all duration-300 hover:bg-[#111111]"
               >
-                <span>Book a Round</span>
+                <span>BOOK A ROUND</span>
 
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#C8E650] text-[#1A1A1A] transition-transform duration-300 group-hover:rotate-45">
                   <svg
