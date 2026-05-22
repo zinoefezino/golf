@@ -298,9 +298,9 @@ export default function BookingPage() {
             <p className="text-[#4A7C2F] text-sm font-semibold italic mb-1">
               Book a Round
             </p>
-            <h1 className="text-[#1A1A1A] text-3xl font-black tracking-tight">
+            <h2 className="text-[#1A1A1A] text-3xl font-black tracking-tight">
               Book Your Tee Time
-            </h1>
+            </h2>
           </div>
 
           <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-[#E8E4DC]">
