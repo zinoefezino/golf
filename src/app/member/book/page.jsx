@@ -294,9 +294,9 @@ export default function MemberBookPage() {
             Member Booking
           </p>
 
-          <h1 className="text-[#1A1A1A] text-3xl font-black leading-tight tracking-tight">
+          <h2 className="text-[#1A1A1A] text-3xl font-black leading-tight tracking-tight">
             Book a Round
-          </h1>
+          </h2>
 
           <p className="text-[#888] text-sm mt-1">
             Your booking will be saved to your account and tracked in your

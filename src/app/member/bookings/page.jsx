@@ -88,9 +88,9 @@ export default function BookingsPage() {
               Member Area
             </p>
 
-            <h1 className="text-[#1A1A1A] text-3xl font-black leading-tight tracking-tight">
+            <h2 className="text-[#1A1A1A] text-3xl font-black leading-tight tracking-tight">
               Booking History
-            </h1>
+            </h2>
           </div>
 
           <Link

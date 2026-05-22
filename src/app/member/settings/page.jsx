@@ -160,9 +160,9 @@ export default function SettingsPage() {
           <p className="text-[#4A7C2F] text-sm font-semibold italic mb-1">
             Member Area
           </p>
-          <h1 className="text-[#1A1A1A] text-3xl font-black leading-tight tracking-tight">
+          <h2 className="text-[#1A1A1A] text-3xl font-black leading-tight tracking-tight">
             Settings
-          </h1>
+          </h2>
         </div>
 
         {/* ── Change password ── */}
