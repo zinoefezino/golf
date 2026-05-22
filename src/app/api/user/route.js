@@ -57,6 +57,7 @@ export async function PATCH(req) {
           phone: updated.phone,
           bio: updated.bio,
           avatar: updated.avatar,
+          membershipType: updated.membershipType,
         },
       },
       { status: 200 },

@@ -32,8 +32,8 @@ const UserSchema = new mongoose.Schema(
     },
     membershipType: {
       type: String,
-      enum: ["public", "member", "premium"],
-      default: "public",
+      enum: ["standard", "premium"],
+      default: "standard",
     },
     bio: {
       type: String,

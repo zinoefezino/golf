@@ -99,7 +99,7 @@ const initialForm = {
   phone: "",
   password: "",
   confirm: "",
-  membership: "public",
+  membership: "standard",
   agree: false,
 };
 
@@ -368,8 +368,11 @@ export default function SignUpPage() {
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { id: "public", label: "Guest", sub: "Pay per round" },
-                  { id: "member", label: "Member", sub: "Priority booking" },
+                  {
+                    id: "standard",
+                    label: "Standard",
+                    sub: "Priority booking",
+                  },
                   { id: "premium", label: "Premium", sub: "All access" },
                 ].map((m) => (
                   <button

@@ -11,7 +11,10 @@ const RegisterSchema = z.object({
   email: z.string().email("Valid email required"),
   phone: z.string().min(1, "Phone is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
-  membershipType: z.enum(["public", "member", "premium"]).default("public"),
+
+  // Client can only choose Standard or Premium.
+  // We map Standard -> `member` for storage.
+  membershipType: z.enum(["standard", "premium"]).default("standard"),
 });
 
 export async function POST(req) {
@@ -29,6 +32,11 @@ export async function POST(req) {
 
     const { firstName, lastName, email, phone, password, membershipType } =
       parsed.data;
+
+    // Store membership in the existing DB shape:
+    // - Standard -> standard
+    // - Premium -> premium
+    const storedMembershipType = membershipType;
 
     await connectDB();
 
@@ -51,7 +59,7 @@ export async function POST(req) {
       email: email.toLowerCase(),
       phone,
       password: hashedPassword,
-      membershipType,
+      membershipType: storedMembershipType,
     });
 
     // ── Return user without password ──

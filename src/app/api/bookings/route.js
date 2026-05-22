@@ -3,6 +3,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Booking from "@/models/Booking";
+import { calculateTotal } from "@/lib/pricing";
 
 // ── Validation schema ──
 const BookingSchema = z.object({
@@ -68,11 +69,20 @@ export async function POST(req) {
     // Check if logged in — member booking
     const session = await auth();
 
+    // ── Calculate price server-side (source of truth) ──
+    const membershipType = session?.user?.membershipType ?? "public";
+    const pricing = calculateTotal({
+      holes: parsed.data.holes,
+      cart: parsed.data.cart,
+      membershipType,
+    });
+
     const booking = await Booking.create({
       ...parsed.data,
       userId: session?.user?.id ?? null,
       guestInfo: session ? {} : parsed.data.guestInfo,
       status: "pending",
+      totalAmount: pricing.total,
     });
 
     return NextResponse.json(

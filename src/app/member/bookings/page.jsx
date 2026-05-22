@@ -11,6 +11,9 @@ import {
   ShoppingCart,
   Flag,
   AlertTriangle,
+  ClipboardList,
+  CalendarCheck,
+  Ban,
 } from "lucide-react";
 
 const FILTERS = ["All", "Confirmed", "Pending", "Cancelled"];
@@ -102,35 +105,60 @@ export default function BookingsPage() {
         </div>
 
         {/* Summary cards */}
-        <div className="grid grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
           {[
             {
               label: "Total Bookings",
               value: total,
               color: "text-[#1A1A1A]",
+              icon: ClipboardList,
+              iconBg: "bg-[#F5F2EC]",
+              iconColor: "text-[#2D4A1E]",
             },
             {
               label: "Active / Upcoming",
               value: upcoming,
               color: "text-[#2D4A1E]",
+              icon: CalendarCheck,
+              iconBg: "bg-[#C8E650]/20",
+              iconColor: "text-[#2D4A1E]",
             },
             {
               label: "Cancelled",
               value: cancelled,
               color: "text-red-500",
+              icon: Ban,
+              iconBg: "bg-red-50",
+              iconColor: "text-red-500",
             },
-          ].map((s) => (
-            <div
-              key={s.label}
-              className="bg-white rounded-2xl p-4 md:p-5 border border-[#E8E4DC]"
-            >
-              <span className={`text-2xl md:text-3xl font-black ${s.color}`}>
-                {s.value}
-              </span>
+          ].map((s) => {
+            const Icon = s.icon;
 
-              <p className="text-xs text-[#888] font-medium mt-1">{s.label}</p>
-            </div>
-          ))}
+            return (
+              <div
+                key={s.label}
+                className="bg-white rounded-2xl p-4 md:p-5 border border-[#E8E4DC] flex items-center justify-between gap-4 shadow-[0_10px_30px_rgba(45,74,30,0.05)]"
+              >
+                <div>
+                  <span
+                    className={`text-2xl md:text-3xl font-black ${s.color}`}
+                  >
+                    {s.value}
+                  </span>
+
+                  <p className="text-xs text-[#888] font-medium mt-1">
+                    {s.label}
+                  </p>
+                </div>
+
+                <div
+                  className={`w-11 h-11 rounded-2xl ${s.iconBg} flex items-center justify-center shrink-0`}
+                >
+                  <Icon className={`w-5 h-5 ${s.iconColor}`} />
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Filter tabs */}
