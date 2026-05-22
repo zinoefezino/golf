@@ -262,18 +262,18 @@ export default function AboutSection() {
               >
                 Be part of a club that plays with purpose.
               </h3>
-
-              <Link
-                data-cta-copy
-                href="/signup"
-                className="group inline-flex w-fit items-center gap-4 rounded-full bg-[#C8E650] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-[#1A1A1A] transition-all duration-300 hover:bg-white mt-10"
-              >
-                <span>REGISTER</span>
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-white transition-transform duration-300 group-hover:rotate-45">
-                  <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
-                </span>
-              </Link>
             </div>
+
+            <Link
+              data-cta-copy
+              href="/signup"
+              className="group inline-flex w-fit items-center gap-4 rounded-full bg-[#C8E650] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-[#1A1A1A] transition-all duration-300 hover:bg-white mt-5"
+            >
+              <span>REGISTER</span>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-white transition-transform duration-300 group-hover:rotate-45">
+                <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
+              </span>
+            </Link>
           </div>
 
           <div
