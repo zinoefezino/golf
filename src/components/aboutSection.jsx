@@ -265,7 +265,6 @@ export default function AboutSection() {
             </div>
 
             <Link
-              data-cta-copy
               href="/signup"
               className="group inline-flex w-fit items-center gap-4 rounded-full bg-[#C8E650] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-[#1A1A1A] transition-all duration-300 hover:bg-white mt-5"
             >
