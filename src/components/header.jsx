@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 const NAV_LINKS = [
   { label: "Service", hasDropdown: true },
@@ -94,20 +95,11 @@ export default function Header() {
         <div className="hidden md:flex">
           <Link
             href="/login"
-            className="group flex items-center gap-4 rounded-full bg-[#121212] py-1 pl-6 pr-1 text-sm font-medium text-white shadow-lg shadow-black/30 backdrop-blur-md transition-all duration-300 hover:bg-[#1E3517]"
+            className="group inline-flex w-fit items-center gap-4 rounded-full bg-[#C8E650] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-[#1A1A1A] transition-all duration-300 hover:bg-white"
           >
-            <span>Login</span>
-
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C8E650] text-black transition-transform duration-300 group-hover:rotate-45">
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.8"
-                viewBox="0 0 24 24"
-              >
-                <path d="M7 17L17 7M7 7h10v10" />
-              </svg>
+            <span>LOGIN</span>
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-white transition-transform duration-300 group-hover:rotate-45">
+              <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
             </span>
           </Link>
         </div>
@@ -148,20 +140,11 @@ export default function Header() {
 
             <Link
               href="/login"
-              className="group mt-2 flex items-center justify-between rounded-full bg-[#121212] py-1.5 pl-5 pr-1.5 font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#2D4A1E]"
+              className="group inline-flex w-fit items-center gap-4 rounded-full bg-[#C8E650] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-[#1A1A1A] transition-all duration-300 hover:bg-white"
             >
-              <span>Login</span>
-
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C8E650] text-[#121212] transition-transform duration-300 group-hover:rotate-45">
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.7"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M7 17L17 7M7 7h10v10" />
-                </svg>
+              <span>LOGIN</span>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-white transition-transform duration-300 group-hover:rotate-45">
+                <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
               </span>
             </Link>
           </div>

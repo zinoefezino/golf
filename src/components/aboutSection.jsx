@@ -1,194 +1,167 @@
 import Image from "next/image";
 import Link from "next/link";
-
-function ArrowIcon({ className = "h-4 w-4" }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.6"
-      viewBox="0 0 24 24"
-    >
-      <path d="M7 17L17 7M7 7h10v10" />
-    </svg>
-  );
-}
-
-function PillButton({ href = "/booking", children }) {
-  return (
-    <Link
-      href={href}
-      className="group inline-flex items-center gap-4 rounded-full bg-[#1A1A1A] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-white shadow-xl shadow-black/10 transition-all duration-300 hover:bg-[#2D4A1E]"
-    >
-      <span>{children}</span>
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#C8E650] text-[#1A1A1A] transition-transform duration-300 group-hover:rotate-45">
-        <ArrowIcon />
-      </span>
-    </Link>
-  );
-}
+import { ArrowUpRight, Star } from "lucide-react";
 
 export default function AboutSection() {
   return (
     <section className="overflow-hidden bg-[#F5F2EC] px-4 py-16 md:px-8 md:py-24">
       <div className="mx-auto max-w-7xl">
-        {/* Top intro */}
-        <div className="grid gap-10 border-b border-[#2D4A1E]/10 pb-14 md:grid-cols-[0.9fr_1.1fr] md:items-end md:pb-20">
-          {/* LEFT: LABEL + TITLE */}
+        <div className="grid gap-10 border-b border-[#2D4A1E]/10 pb-14 md:grid-cols-[0.95fr_1.05fr] md:items-end md:pb-20">
           <div>
-            <span className="inline-flex rounded-full border border-[#2D4A1E]/15 bg-white/70 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.25em] text-[#2D4A1E]/70">
+            <span className="inline-flex rounded-full border border-[#2D4A1E]/15 bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[#2D4A1E]/70">
               About Us
             </span>
 
-            <h1 className="mt-5 max-w-xl  font-black leading-[1.05] tracking-tight text-[#172112] text-5xl md:text-6xl ">
-              Built for players
-              <br />
-              who love the game
+            <h1 className="mt-5 max-w-xl text-4xl md:text-6xl font-black leading-tight tracking-tight text-[#172112] ">
+              Built for Better Golf
             </h1>
           </div>
 
-          {/* RIGHT: ABOUT BOX + STATS */}
-          <div className="md:justify-self-end max-w-2xl">
-            {/* ABOUT BOX */}
-            <div className="rounded-4xl border border-[#2D4A1E]/10 bg-white/70 p-6 shadow-sm backdrop-blur md:p-8">
-              <p className="text-sm leading-relaxed text-[#172112]/70">
-                We are a premium golf and leisure destination built for players
-                who value calm environments, perfectly maintained fairways, and
-                a refined clubhouse experience. Every detail of the course is
-                designed to blend sport, nature, and comfort into one seamless
-                journey.
-              </p>
+          <div className="max-w-2xl md:justify-self-end">
+            <p className="text-sm leading-relaxed text-[#172112]/70 md:text-base">
+              We are a premium golf and leisure destination created for players
+              who value calm surroundings, well-kept fairways, and a clubhouse
+              experience that feels considered from arrival to the final round.
+            </p>
 
-              <p className="mt-4 text-sm leading-relaxed text-[#172112]/60">
-                From sunrise tee times to evening clubhouse dining, we create
-                moments that feel intentional, immersive, and memorable long
-                after your final round.
-              </p>
-            </div>
-
-            {/* STATS */}
-            <div className="mt-8 grid grid-cols-2 gap-3 sm:flex">
-              <div className="rounded-3xl border border-[#2D4A1E]/10 bg-white/70 px-6 py-6 shadow-sm backdrop-blur">
-                <p className="text-3xl font-black leading-none text-[#172112]">
-                  18
-                </p>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[#172112]/45">
-                  Championship Holes
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-[#C8E650] px-6 py-6 shadow-sm">
-                <p className="text-3xl font-black leading-none text-[#172112]">
-                  365
-                </p>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[#172112]/70">
-                  Days Open
-                </p>
-              </div>
-            </div>
+            <p className="mt-4 text-sm leading-relaxed text-[#172112]/60 md:text-base">
+              From early tee times to relaxed dining after play, every part of
+              the club is shaped to make your visit simple, polished, and
+              memorable.
+            </p>
           </div>
         </div>
 
-        {/* Feature row */}
-        <div className="grid gap-10 py-12 md:grid-cols-[0.9fr_1.1fr] md:items-center md:py-16">
-          <div className="order-2 md:order-1">
+        <div className="grid gap-10 py-14 md:grid-cols-[1fr_1.05fr] md:items-center md:py-20">
+          <div className="relative h-90 overflow-hidden rounded-4xl border border-[#2D4A1E]/10 bg-[#E8E4DC] shadow-[0_24px_70px_rgba(45,74,30,0.12)] md:h-140">
+            <Image
+              src="/img1.avif"
+              alt="Golf course fairway"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+              priority
+            />
+          </div>
+
+          <div>
             <span className="mb-4 inline-flex rounded-full bg-[#2D4A1E]/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-[#2D4A1E]">
               Course Standard
             </span>
 
-            <h1 className="text-4xl md:text-6xl font-black leading-tight tracking-tight text-[#172112] ">
-              Championship Conditions,
-              <br />
-              Confident Play
+            <h1 className="max-w-xl  font-black leading-tight tracking-tight text-[#172112] text-4xl md:text-6xl">
+              Championship Conditions, Every Round
             </h1>
 
             <div className="mt-6 space-y-4 text-sm leading-relaxed text-[#172112]/65 md:text-base">
               <p>
-                Whether you’re a seasoned player or stepping onto the course for
-                the first time, our fairways are designed to challenge, inspire,
-                and elevate every round.
+                Our course is maintained for confident play, with fairways,
+                greens, and practice spaces designed to support every level of
+                golfer.
               </p>
 
               <p>
-                Every detail is carefully shaped to create a playing experience
-                that feels balanced, focused, and deeply rewarding from the
-                first swing to the final putt.
+                Whether you are chasing a personal best or enjoying a relaxed
+                round, the experience is calm, focused, and rewarding.
               </p>
             </div>
 
             <div className="mt-8">
-              <PillButton>BOOK NOW</PillButton>
-            </div>
-          </div>
-
-          <div className="order-1 grid h-130 grid-cols-6 grid-rows-6 gap-3 md:order-2">
-            <div className="group relative col-span-6 row-span-4 overflow-hidden rounded-4xl sm:col-span-4 sm:row-span-6">
-              <Image
-                src="/img1.avif"
-                alt="Golfer on a quality course"
-                fill
-                sizes="(max-width: 768px) 100vw, (min-width: 768px) 60vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5">
-                <p className=" font-black leading-tight text-white">
-                  Championship-ready fairways
-                </p>
-                <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/70">
-                  A refined course experience shaped for focus, flow, and
-                  unforgettable play.
-                </p>
-              </div>
-            </div>
-
-            <div className="group relative col-span-3 row-span-2 overflow-hidden rounded-3xl sm:col-span-2 sm:row-span-3">
-              <Image
-                src="/img3.avif"
-                alt="Golfers on the course"
-                fill
-                sizes="(max-width: 768px) 100vw, (min-width: 768px) 35vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
-              <p className="absolute bottom-4 left-4 right-4 text-sm font-bold leading-tight text-white">
-                Premium gear and fittings
-              </p>
-            </div>
-
-            <div className="relative col-span-3 row-span-2 overflow-hidden rounded-3xl bg-[#1E3517] p-5 text-white sm:col-span-2 sm:row-span-3">
-              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full border border-[#C8E650]/30" />
-              <div className="absolute -bottom-12 right-8 h-28 w-28 rounded-full bg-[#C8E650]/10" />
-
-              <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-white/70">
-                Member Rated
-              </span>
-
-              <div className="mt-8">
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg
-                      key={star}
-                      className="h-4 w-4 text-[#C8E650]"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <p className="mt-3 text-3xl font-black">4.9</p>
-                <p className="mt-1 text-xs font-medium text-white/60">
-                  2,000+ player reviews
-                </p>
-              </div>
+              <Link
+                href="/booking"
+                className="group inline-flex w-fit items-center gap-4 rounded-full bg-[#C8E650] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-[#1A1A1A] transition-all duration-300 hover:bg-white"
+              >
+                <span>BOOK NOW</span>
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-white transition-transform duration-300 group-hover:rotate-45">
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
+                </span>
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Bottom CTA */}
-        <div className="grid overflow-hidden rounded-4xl bg-[#172112] md:grid-cols-[1fr_0.9fr]">
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-[1.75rem] border border-[#2D4A1E]/10 bg-white p-6 shadow-[0_18px_55px_rgba(45,74,30,0.06)]">
+            <p className="text-4xl font-black leading-none text-[#172112]">
+              18
+            </p>
+            <p className="mt-2 text-xs font-bold uppercase tracking-wide text-[#172112]/45">
+              Championship Holes
+            </p>
+          </div>
+
+          <div className="rounded-[1.75rem] bg-[#C8E650] p-6 shadow-[0_18px_55px_rgba(200,230,80,0.18)]">
+            <p className="text-4xl font-black leading-none text-[#172112]">
+              365
+            </p>
+            <p className="mt-2 text-xs font-bold uppercase tracking-wide text-[#172112]/70">
+              Days Open
+            </p>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-[#2D4A1E]/10 bg-white p-6 shadow-[0_18px_55px_rgba(45,74,30,0.06)]">
+            <div className="flex items-center gap-1 text-[#C8E650]">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star key={star} className="h-4 w-4 fill-current" />
+              ))}
+            </div>
+
+            <p className="mt-3 text-4xl font-black leading-none text-[#172112]">
+              4.9
+            </p>
+            <p className="mt-2 text-xs font-bold uppercase tracking-wide text-[#172112]/45">
+              Player Rating
+            </p>
+          </div>
+        </div>
+
+        {/* <div className="mt-14 grid gap-5 md:grid-cols-2">
+          <article className="group overflow-hidden rounded-4xl border border-[#2D4A1E]/10 bg-white shadow-[0_20px_60px_rgba(45,74,30,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(45,74,30,0.14)]">
+            <div className="relative h-72 overflow-hidden bg-[#E8E4DC]">
+              <Image
+                src="/img3.avif"
+                alt="Golfers on the course"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
+
+            <div className="p-6">
+              <h3 className="text-xl font-black text-[#172112]">
+                Relaxed Club Atmosphere
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#172112]/60">
+                A welcoming setting for practice, play, dining, and time with
+                other members.
+              </p>
+            </div>
+          </article>
+
+          <article className="group overflow-hidden rounded-4xl border border-[#2D4A1E]/10 bg-white shadow-[0_20px_60px_rgba(45,74,30,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(45,74,30,0.14)]">
+            <div className="relative h-72 overflow-hidden bg-[#E8E4DC]">
+              <Image
+                src="/img8.avif"
+                alt="Golfers enjoying the course"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
+
+            <div className="p-6">
+              <h3 className="text-xl font-black text-[#172112]">
+                Made for Memorable Rounds
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#172112]/60">
+                Scenic views, thoughtful service, and a course experience built
+                around comfort and quality.
+              </p>
+            </div>
+          </article>
+        </div> */}
+
+        <div className="mt-14 grid overflow-hidden rounded-4xl bg-[#172112] shadow-[0_28px_90px_rgba(23,33,18,0.24)] md:grid-cols-[1fr_0.9fr]">
           <div className="flex flex-col justify-between gap-10 p-7 md:p-10">
             <div>
               <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
@@ -206,7 +179,7 @@ export default function AboutSection() {
             >
               <span>BOOK A TEE TIME</span>
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-white transition-transform duration-300 group-hover:rotate-45">
-                <ArrowIcon />
+                <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
               </span>
             </Link>
           </div>

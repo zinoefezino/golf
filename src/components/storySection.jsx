@@ -106,11 +106,12 @@ export default function StorySection() {
 
           <Link
             href={data.cta.href}
-            className="mt-10 inline-flex items-center gap-4 rounded-full bg-[#121212] text-white pl-6 pr-2 py-2 text-sm font-medium hover:bg-[#1E3517] transition"
+            className="group mt-10 inline-flex w-fit items-center gap-4 rounded-full bg-[#C8E650] py-1.5 pl-6 pr-1.5 text-sm font-bold tracking-wide text-[#1A1A1A] transition-all duration-300 hover:bg-white"
           >
-            {data.cta.label}
-            <span className="h-10 w-10 grid place-items-center rounded-full bg-[#C8E650] text-black">
-              <ArrowIcon />
+            <span>{data.cta.label}</span>
+
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-white transition-transform duration-300 group-hover:rotate-45">
+              <ArrowIcon className="h-4 w-4" />
             </span>
           </Link>
         </div>

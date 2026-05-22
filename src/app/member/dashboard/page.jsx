@@ -185,13 +185,13 @@ export default function DashboardPage() {
           <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-white/5" />
           <div className="absolute -right-4 -bottom-10 w-32 h-32 rounded-full bg-[#C8E650]/10" />
 
-          <div className="relative z-10">
+          <div className="relative z-10 ">
             <p className="text-[#C8E650] text-sm font-semibold italic mb-2 inline-flex items-center gap-2">
-              <BadgeCheck className="w-4 h-4" />
+              <BadgeCheck className="w-4 h-4 shrink-0" />
               Welcome back
             </p>
 
-            <h1 className="text-white text-2xl md:text-4xl font-black leading-tight tracking-tight mb-2">
+            <h1 className="text-white text-2xl md:text-4xl font-black leading-tight tracking-tight">
               {user ? (
                 `${user.firstName} ${user.lastName}`
               ) : (
@@ -199,18 +199,16 @@ export default function DashboardPage() {
               )}
             </h1>
 
-            <div className="flex items-center gap-2 mt-1 flex-wrap">
-              <span className="bg-[#C8E650] text-[#1A1A1A] text-xs font-bold px-3 py-1 rounded-full capitalize">
+            <div className="mt-3">
+              <span className="inline-flex bg-[#C8E650] text-[#1A1A1A] text-xs font-bold px-3 py-1 rounded-full capitalize">
                 {membership.label}
               </span>
-
-              <span className="text-white/50 text-xs">{user?.email}</span>
             </div>
           </div>
 
           <Link
             href="/member/book"
-            className="relative z-10 self-start md:self-auto inline-flex items-center gap-2 bg-[#C8E650] text-[#1A1A1A] font-bold text-sm px-6 py-3 rounded-full hover:bg-white transition-all duration-300 shadow-lg group shrink-0"
+            className="inline-flex w-full md:w-auto items-center justify-center gap-2 bg-[#C8E650] text-[#1A1A1A] font-bold text-sm px-6 py-3 rounded-full hover:bg-white transition-all duration-300 shadow-lg group shrink-0"
           >
             Book a Round
             <span className="w-5 h-5 rounded-full bg-[#2D4A1E] flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">

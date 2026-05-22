@@ -31,32 +31,26 @@ const CARDS = [
   },
 ];
 
-function Card({ card, className = "", textClassName = "", priority = false }) {
+function Card({ card, priority = false }) {
   return (
-    <article
-      className={`group relative overflow-hidden rounded-[1.75rem] bg-[#1A1A1A] shadow-sm ${className}`}
-    >
-      <Image
-        src={card.src}
-        alt={card.alt}
-        fill
-        priority={priority}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
-      />
+    <article className="group overflow-hidden rounded-3xl border border-[#E3DED4] bg-white shadow-[0_18px_55px_rgba(45,74,30,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(45,74,30,0.14)]">
+      <div className="relative h-64 overflow-hidden bg-[#E8E4DC] sm:h-72">
+        <Image
+          src={card.src}
+          alt={card.alt}
+          fill
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      </div>
 
-      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/35 to-transparent" />
-      <div className="absolute inset-0 bg-linear-to-r from-black/30 via-transparent to-transparent" />
-
-      <div
-        className={`absolute bottom-0 left-0 right-0 p-5 md:p-6 ${textClassName}`}
-      >
-        <p className="mb-2 text-xl font-black leading-tight text-white md:text-2xl">
+      <div className="p-5 md:p-6">
+        <p className="text-xl font-black leading-tight text-[#1A1A1A]">
           {card.label}
         </p>
-        <p className="max-w-sm text-sm leading-relaxed text-white/65">
-          {card.sub}
-        </p>
+
+        <p className="mt-2 text-sm leading-relaxed text-[#777]">{card.sub}</p>
       </div>
     </article>
   );
@@ -66,9 +60,9 @@ export default function ClubExperienceSection() {
   return (
     <section className="bg-[#F5F2EC] px-4 py-14 md:px-16 md:py-20">
       <div className="mx-auto max-w-7xl">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-          <h1 className="mb-4 text-4xl md:text-6xl tracking-tight font-black leading-tight text-[#1A1A1A] ">
-            Everything You Need for a Memorable Round
+        <div className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
+          <h1 className="mb-4  font-black leading-tight tracking-tight text-[#1A1A1A] text-4xl md:text-6xl">
+            Everything for a Memorable Round
           </h1>
 
           <p className="mx-auto max-w-lg text-sm leading-relaxed text-[#777] md:text-base">
@@ -78,30 +72,10 @@ export default function ClubExperienceSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-[2fr_3fr] md:grid-rows-[250px_250px_260px]">
-          <Card
-            card={CARDS[0]}
-            priority
-            className="h-80 md:col-start-1 md:row-span-2 md:h-full"
-          />
-
-          <Card
-            card={CARDS[1]}
-            className="h-64 md:col-start-2 md:row-start-1 md:h-full"
-            textClassName="md:max-w-md"
-          />
-
-          <Card
-            card={CARDS[2]}
-            className="h-64 md:col-start-2 md:row-start-2 md:h-full"
-            textClassName="md:max-w-md"
-          />
-
-          <Card
-            card={CARDS[3]}
-            className="h-72 md:col-span-2 md:row-start-3 md:h-full"
-            textClassName="md:max-w-xl"
-          />
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6">
+          {CARDS.map((card, index) => (
+            <Card key={card.id} card={card} priority={index === 0} />
+          ))}
         </div>
       </div>
     </section>
