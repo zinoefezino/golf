@@ -19,11 +19,11 @@ export default function Footer() {
       <div className="px-4 md:px-16 pt-14 pb-12 flex flex-col md:flex-row md:items-center md:justify-between gap-8 border-b border-white/10">
         {/* Left – headline */}
         <div className="max-w-md">
-          <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight">
-            Ready to Tee Off?
+          <h2 className="text-4xl md:text-5xl font-black leading-tight tracking-tight">
+            Elevate Your Game,
             <br />
-            <span className="text-white/70 font-black">Discuss with us.</span>
-          </h1>
+            <span className="text-white/70 font-black">Embrace the Green.</span>
+          </h2>
         </div>
 
         {/* Right – circular icon button */}
