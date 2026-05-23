@@ -28,7 +28,7 @@ export default function Footer() {
 
         {/* Right – circular icon button */}
         <Link
-          href="mailto:hello@golfngv.com"
+          href="mailto:iamzino06@gmail.com"
           className="self-start md:self-auto w-14 h-14 rounded-full bg-[#C8E650] flex items-center justify-center hover:scale-110 transition-transform duration-300 shadow-lg shrink-0"
           aria-label="Email us"
         >
