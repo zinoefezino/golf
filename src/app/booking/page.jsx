@@ -486,7 +486,7 @@ export default function BookingPage() {
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-8 py-3 rounded-full bg-[#C8E650] text-[#1A1A1A] text-sm font-bold hover:bg-[#2D4A1E] hover:text-white transition-all shadow-md disabled:opacity-60"
+                  className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#C8E650] px-5 py-3 text-xs font-black text-[#1A1A1A] transition-all duration-300 hover:bg-[#2D4A1E] hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:px-8 sm:text-sm"
                 >
                   {loading ? "Processing..." : "Confirm Booking ✓"}
                 </button>

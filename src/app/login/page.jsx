@@ -183,7 +183,7 @@ export default function LoginPage() {
               <path d="M16 2 A14 14 0 0 0 16 30 Z" fill="#4A7C2F" />
               <path d="M16 2 A14 14 0 0 1 16 30 Z" fill="#C8E650" />
             </svg>
-            <span className="text-lg font-bold text-[#1A1A1A]">Golfngv</span>
+            <span className="text-lg font-bold text-[#1A1A1A]">Golf</span>
           </Link>
           <Link
             href="/sign-up"
