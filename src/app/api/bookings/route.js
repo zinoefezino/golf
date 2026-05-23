@@ -6,6 +6,11 @@ import Booking from "@/models/Booking";
 import { calculateTotal } from "@/lib/pricing";
 
 // ── Validation schema ──
+function getTodayYMD() {
+  // Matches <input type="date"> format: YYYY-MM-DD
+  return new Date().toISOString().split("T")[0];
+}
+
 const BookingSchema = z.object({
   date: z.string().min(1, "Date is required"),
   time: z.string().min(1, "Time is required"),
@@ -68,6 +73,16 @@ export async function POST(req) {
 
     // Check if logged in — member booking
     const session = await auth();
+
+    // ── Prevent booking past dates (server-side source of truth) ──
+    // date is stored/transported as YYYY-MM-DD (matches <input type="date">)
+    const todayYMD = getTodayYMD();
+    if (parsed.data.date < todayYMD) {
+      return NextResponse.json(
+        { error: "Cannot book a date in the past" },
+        { status: 400 },
+      );
+    }
 
     // ── Calculate price server-side (source of truth) ──
     const membershipType = session?.user?.membershipType ?? "public";
